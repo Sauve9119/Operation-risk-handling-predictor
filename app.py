@@ -28,7 +28,7 @@ if st.button("Predict"):
     pred = model.predict(data)[0]
     probs = model.predict_proba(data)[0]
 
-    labels = {0:"Low Risk", 1:"Medium Risk", 2:"High Risk"}
+    labels = {0:"Low Risk Capacity", 1:"Medium Risk Capacity", 2:"High Risk Capacity"}
 
     st.subheader(f"Prediction: {labels[pred]}")
 
@@ -38,7 +38,7 @@ if st.button("Predict"):
     st.bar_chart(probs)
 
     # ---------------- RECOMMENDATION ----------------
-    if pred == 0:
+    if pred == 2:
         st.success("You are well prepared for real-world situations ✅")
 
     elif pred == 1:
