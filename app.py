@@ -92,6 +92,20 @@ if page == "📊 Data Analysis":
     # ---- DATA ----
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
+     
+ # Display data information
+    st.subheader("Data Information")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("Data Shape:", df.shape)
+        st.write("Columns:", df.columns.tolist())
+    with col2:
+        buffer = pd.DataFrame({
+            'Column': df.columns,
+            'Non-Null Count': df.count().values,
+            'Data Type': df.dtypes.values
+        })
+        st.dataframe(buffer)
 
     # ---- HEATMAP ----
     st.subheader("Correlation Heatmap")
@@ -104,10 +118,10 @@ if page == "📊 Data Analysis":
     st.pyplot(fig)
 
     # ---- DISTRIBUTION ----
-    st.subheader("Response Distribution")
+    # st.subheader("Response Distribution")
 
-    fig2 = df.hist(figsize=(10,6))
-    st.pyplot(fig2[0][0].figure)
+    # fig2 = df.hist(figsize=(8,6))
+    # st.pyplot(fig2[0][0].figure)
 
 # ===================== PAGE 2 =====================
 elif page == "🤖 Prediction":
