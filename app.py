@@ -84,9 +84,9 @@ if page == "📊 Data Analysis":
             'Data Type': df.dtypes.values
         })
         st.dataframe(buffer)
-st.subheader("📊 Data Visualizations")
+    st.subheader("📊 Data Visualizations")
 
-viz_type = st.selectbox(
+    viz_type = st.selectbox(
     "Select Visualization",
     [
         "Question-wise Average Score",
@@ -95,10 +95,10 @@ viz_type = st.selectbox(
         "Overall Score Distribution",
         "Boxplot Analysis"
     ]
-)
+    )
 
 # ---------------- 1. Average Score ----------------
-if viz_type == "Question-wise Average Score":
+    if viz_type == "Question-wise Average Score":
 
     avg_scores = df.mean()
 
@@ -112,13 +112,13 @@ if viz_type == "Question-wise Average Score":
     st.pyplot(fig)
 
 # ---------------- 2. Distribution ----------------
-elif viz_type == "Response Distribution":
+    elif viz_type == "Response Distribution":
 
     fig = df.hist(figsize=(10,6))
     st.pyplot(fig[0][0].figure)
 
 # ---------------- 3. Heatmap ----------------
-elif viz_type == "Correlation Heatmap":
+    elif viz_type == "Correlation Heatmap":
 
     corr = df.corr()
 
@@ -128,7 +128,7 @@ elif viz_type == "Correlation Heatmap":
     st.pyplot(fig)
 
 # ---------------- 4. Overall Score ----------------
-elif viz_type == "Overall Score Distribution":
+    elif viz_type == "Overall Score Distribution":
 
     df["Total_Score"] = df.sum(axis=1)
 
@@ -142,7 +142,7 @@ elif viz_type == "Overall Score Distribution":
     st.pyplot(fig)
 
 # ---------------- 5. Boxplot ----------------
-elif viz_type == "Boxplot Analysis":
+    elif viz_type == "Boxplot Analysis":
 
     fig, ax = plt.subplots()
     sns.boxplot(data=df, ax=ax)
@@ -150,9 +150,16 @@ elif viz_type == "Boxplot Analysis":
     ax.set_title("Boxplot of All Questions")
 
     st.pyplot(fig)
+#   summary
+    st.subheader("Summary Statistics of Numerical Columns")
+    st.dataframe(df.describe())
+    st.subheader("Summary Statistics of Categorical Columns")
+    categorical_cols = df.select_dtypes(include=['object']).columns
+    cat_summary = df[categorical_cols].describe()
+    st.dataframe(cat_summary)
 
 # ===================== PAGE 2 =====================
-elif page == "🤖 Prediction":
+    elif page == "🤖 Prediction":
 
     st.title("🎯 Job Readiness Risk Predictor")
 
