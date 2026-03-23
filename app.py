@@ -140,47 +140,47 @@ elif page == "🤖 Prediction":
                  inputs.append(val)
 
     # ---- PREDICT ----
-    if st.button("Predict Risk"):
+         if st.button("Predict Risk"):
 
-        data = np.array([inputs])
-        data = scaler.transform(data)
-
-        pred = model.predict(data)[0]
-        probs = model.predict_proba(data)[0]
-
-        labels = {0:"Low Risk", 1:"Medium Risk", 2:"High Risk"}
-
-        st.subheader(f"Prediction: {labels[pred]}")
-
-        # ---- PROBABILITY GRAPH ----
-        st.subheader("Confidence")
-
-        prob_df = pd.DataFrame({
-            "Risk Level": ["Low", "Medium", "High"],
-            "Probability": probs
-        })
-
-        st.bar_chart(prob_df.set_index("Risk Level"))
-
-        # ---- RECOMMENDATION ----
-        st.subheader("Recommendation")
-
-        if pred == 0:
-            st.success("You are well prepared for job situations ✅")
-
-        elif pred == 1:
-            st.warning("You need improvement in some areas ⚠️")
-            st.markdown("""
-            - Improve technical skills  
-            - Practice problem solving  
-            - Work on real-world projects  
-            """)
-
-        else:
-            st.error("You need serious preparation ❌")
-            st.markdown("""
-            - Focus on basics  
-            - Improve communication  
-            - Build strong projects  
-            - Practice interviews  
-            """)
+             data = np.array([inputs])
+             data = scaler.transform(data)
+     
+             pred = model.predict(data)[0]
+             probs = model.predict_proba(data)[0]
+     
+             labels = {0:"Low Risk", 1:"Medium Risk", 2:"High Risk"}
+     
+             st.subheader(f"Prediction: {labels[pred]}")
+     
+             # ---- PROBABILITY GRAPH ----
+             st.subheader("Confidence")
+     
+             prob_df = pd.DataFrame({
+                 "Risk Level": ["Low", "Medium", "High"],
+                 "Probability": probs
+             })
+     
+             st.bar_chart(prob_df.set_index("Risk Level"))
+     
+             # ---- RECOMMENDATION ----
+             st.subheader("Recommendation")
+     
+             if pred == 0:
+                 st.success("You are well prepared for job situations ✅")
+     
+             elif pred == 1:
+                 st.warning("You need improvement in some areas ⚠️")
+                 st.markdown("""
+                 - Improve technical skills  
+                 - Practice problem solving  
+                 - Work on real-world projects  
+                 """)
+     
+             else:
+                 st.error("You need serious preparation ❌")
+                 st.markdown("""
+                 - Focus on basics  
+                 - Improve communication  
+                 - Build strong projects  
+                 - Practice interviews  
+                 """)
