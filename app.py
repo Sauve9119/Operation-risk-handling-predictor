@@ -140,7 +140,7 @@ elif page == "🤖 Prediction":
                  inputs.append(val)
 
     # ---- PREDICT ----
-if st.button("Predict Risk"):
+    if st.button("Predict Risk"):
 
         data = np.array([inputs])
         data = scaler.transform(data)
