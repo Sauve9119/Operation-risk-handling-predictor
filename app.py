@@ -154,9 +154,6 @@ if page == "📊 Data Analysis":
          st.subheader("Summary Statistics of Numerical Columns")
          st.dataframe(df.describe())
          st.subheader("Summary Statistics of Categorical Columns")
-         categorical_cols = df.select_dtypes(include=['object']).columns
-         cat_summary = df[categorical_cols].describe()
-         st.dataframe(cat_summary)
 
 # ===================== PAGE 2 =====================
     elif page == "🤖 Prediction":
