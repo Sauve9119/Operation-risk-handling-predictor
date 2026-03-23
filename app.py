@@ -17,46 +17,8 @@ for col in df.columns:
     mapping = {val: i+1 for i, val in enumerate(unique_vals)}
     df[col] = df[col].map(mapping)
 
-def main():
-    # Initialize session state variables if they don't exist
-    if 'trained_model' not in st.session_state:
-        st.session_state.trained_model = None
-    if 'le' not in st.session_state:
-        st.session_state.le = None
-    if 'ct' not in st.session_state:
-        st.session_state.ct = None
-    if 'model_metrics' not in st.session_state:
-        st.session_state.model_metrics = {}
-    
-    if page == "Data Exploration":
-        data_exploration()
-    elif page == "Model Training":
-        model_training()
-    elif page == "Predictions":
-        make_predictions()
-    
-    # Add footer to the bottom-left corner of the sidebar
-    st.sidebar.markdown(
-        """
-        <style>
-            .footer {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                text-align: left;
-                padding: 10px;
-                font-size: 12px;
-                color: #888;
-            }
-        </style>
-        <div class="footer">
-             <p>If this guess is wrong, blame the dataset not me.</p>
-             <p>Made with 💻 by <a href="https://github.com/aashu-0" target="_blank" style="color: #007acc; text-decoration: none;">@aashu-0</a></p>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+inputs = []
+
      
 # load model
 model = joblib.load("model.pkl")
@@ -156,7 +118,8 @@ if page == "📊 Data Analysis":
          st.subheader("Summary Statistics of Categorical Columns")
 
 # ===================== PAGE 2 =====================
-    elif page == "🤖 Prediction":
+     
+elif page == "🤖 Prediction":
 
          st.title("🎯 Job Readiness Risk Predictor")
      
@@ -177,7 +140,7 @@ if page == "📊 Data Analysis":
                  inputs.append(val)
 
     # ---- PREDICT ----
-    if st.button("Predict Risk"):
+if st.button("Predict Risk"):
 
         data = np.array([inputs])
         data = scaler.transform(data)
