@@ -100,84 +100,84 @@ if page == "📊 Data Analysis":
 # ---------------- 1. Average Score ----------------
     if viz_type == "Question-wise Average Score":
 
-    avg_scores = df.mean()
-
-    fig, ax = plt.subplots()
-    avg_scores.plot(kind='bar', ax=ax)
-
-    ax.set_title("Average Score per Question")
-    ax.set_xlabel("Questions")
-    ax.set_ylabel("Average Score")
-
-    st.pyplot(fig)
+         avg_scores = df.mean()
+     
+         fig, ax = plt.subplots()
+         avg_scores.plot(kind='bar', ax=ax)
+     
+         ax.set_title("Average Score per Question")
+         ax.set_xlabel("Questions")
+         ax.set_ylabel("Average Score")
+     
+         st.pyplot(fig)
 
 # ---------------- 2. Distribution ----------------
     elif viz_type == "Response Distribution":
 
-    fig = df.hist(figsize=(10,6))
-    st.pyplot(fig[0][0].figure)
+         fig = df.hist(figsize=(10,6))
+         st.pyplot(fig[0][0].figure)
 
 # ---------------- 3. Heatmap ----------------
     elif viz_type == "Correlation Heatmap":
 
-    corr = df.corr()
-
-    fig, ax = plt.subplots(figsize=(6,5))
-    sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
-
-    st.pyplot(fig)
+         corr = df.corr()
+     
+         fig, ax = plt.subplots(figsize=(6,5))
+         sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+     
+         st.pyplot(fig)
 
 # ---------------- 4. Overall Score ----------------
     elif viz_type == "Overall Score Distribution":
 
-    df["Total_Score"] = df.sum(axis=1)
-
-    fig, ax = plt.subplots()
-    ax.hist(df["Total_Score"], bins=10)
-
-    ax.set_title("Total Score Distribution")
-    ax.set_xlabel("Score")
-    ax.set_ylabel("Frequency")
-
-    st.pyplot(fig)
+         df["Total_Score"] = df.sum(axis=1)
+     
+         fig, ax = plt.subplots()
+         ax.hist(df["Total_Score"], bins=10)
+     
+         ax.set_title("Total Score Distribution")
+         ax.set_xlabel("Score")
+         ax.set_ylabel("Frequency")
+     
+         st.pyplot(fig)
 
 # ---------------- 5. Boxplot ----------------
     elif viz_type == "Boxplot Analysis":
 
-    fig, ax = plt.subplots()
-    sns.boxplot(data=df, ax=ax)
-
-    ax.set_title("Boxplot of All Questions")
-
-    st.pyplot(fig)
-#   summary
-    st.subheader("Summary Statistics of Numerical Columns")
-    st.dataframe(df.describe())
-    st.subheader("Summary Statistics of Categorical Columns")
-    categorical_cols = df.select_dtypes(include=['object']).columns
-    cat_summary = df[categorical_cols].describe()
-    st.dataframe(cat_summary)
+         fig, ax = plt.subplots()
+         sns.boxplot(data=df, ax=ax)
+     
+         ax.set_title("Boxplot of All Questions")
+     
+         st.pyplot(fig)
+     #   summary
+         st.subheader("Summary Statistics of Numerical Columns")
+         st.dataframe(df.describe())
+         st.subheader("Summary Statistics of Categorical Columns")
+         categorical_cols = df.select_dtypes(include=['object']).columns
+         cat_summary = df[categorical_cols].describe()
+         st.dataframe(cat_summary)
 
 # ===================== PAGE 2 =====================
     elif page == "🤖 Prediction":
 
-    st.title("🎯 Job Readiness Risk Predictor")
-
-    st.write("Rate yourself on following questions (1–5):")
-
-    inputs = []
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        for i in range(4):
-            val = st.slider(f"Question {i+1}", 1, 5, 3)
-            inputs.append(val)
-
-    with col2:
-        for i in range(4, 8):
-            val = st.slider(f"Question {i+1}", 1, 5, 3)
-            inputs.append(val)
+         st.title("🎯 Job Readiness Risk Predictor")
+     
+         st.write("Rate yourself on following questions (1–5):")
+     
+         inputs = []
+     
+         col1, col2 = st.columns(2)
+     
+         with col1:
+             for i in range(4):
+                 val = st.slider(f"Question {i+1}", 1, 5, 3)
+                 inputs.append(val)
+     
+         with col2:
+             for i in range(4, 8):
+                 val = st.slider(f"Question {i+1}", 1, 5, 3)
+                 inputs.append(val)
 
     # ---- PREDICT ----
     if st.button("Predict Risk"):
