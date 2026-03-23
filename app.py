@@ -25,6 +25,24 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["📊 Data Analysis", "🤖 Prediction"])
 
 # ===================== PAGE 1 =====================
+if page == "📊 Data Analysis":
+   # ---- DATA ----
+    st.subheader("Dataset Preview")
+    st.dataframe(df.head())
+     
+ # Display data information
+    st.subheader("Data Information")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write("Data Shape:", df.shape)
+        st.write("Columns:", df.columns.tolist())
+    with col2:
+        buffer = pd.DataFrame({
+            'Column': df.columns,
+            'Non-Null Count': df.count().values,
+            'Data Type': df.dtypes.values
+        })
+        st.dataframe(buffer)
 st.subheader("📊 Data Visualizations")
 
 viz_type = st.selectbox(
