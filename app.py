@@ -165,7 +165,7 @@ elif page == "🤖 Prediction":
              # ---- RECOMMENDATION ----
              st.subheader("Recommendation")
      
-             if pred == 0:
+             if pred == 2:
                  st.success("You are well prepared for job situations ✅")
      
              elif pred == 1:
