@@ -20,108 +20,77 @@ for col in df.columns:
 # load model
 model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
-
-# # correlation heatmap
-# corr_matrix = df.corr()
-
-#  # Plot the heatmap
-# plt.figure(figsize=(8, 6))
-# sns.heatmap(corr_matrix, 
-#             annot=True,      # Show numerical values
-#             cmap='coolwarm', # Color scheme
-#             vmin=-1, vmax=1, # Scale for correlation
-#             fmt=".2f",       # Format to 2 decimal places
-#             linewidths=0.5)  # Add lines between cells
-
-# plt.title('Correlation Heatmap')
-# plt.show()
-
-# ---------------- LOAD MODEL ----------------
-# model = joblib.load("model.pkl")
-# scaler = joblib.load("scaler.pkl")
-
-# st.set_page_config(page_title="Risk Predictor", layout="centered")
-
-# st.title("🎯 Job Readiness Risk Predictor")
-
-# st.write("Answer the questions below:")
-
-# # ---------------- INPUT ----------------
-# inputs = []
-
-# for i in range(8):
-#     val = st.slider(f"Question {i+1}", 1, 5, 3)
-#     inputs.append(val)
-
-# # ---------------- PREDICTION ----------------
-# if st.button("Predict"):
-
-#     data = np.array([inputs])
-#     data = scaler.transform(data)
-
-#     pred = model.predict(data)[0]
-#     probs = model.predict_proba(data)[0]
-
-#     labels = {0:"Low Risk Capacity", 1:"Medium Risk Capacity", 2:"High Risk Capacity"}
-
-#     st.subheader(f"Prediction: {labels[pred]}")
-
-#     st.write("Confidence:")
-#     st.write(probs)
-
-#     st.bar_chart(probs)
-
-#     # ---------------- RECOMMENDATION ----------------
-#     if pred == 2:
-#         st.success("You are well prepared for real-world situations ✅")
-
-#     elif pred == 1:
-#         st.warning("You need improvement in some areas ⚠️")
-
-#     else:
-#         st.error("You need serious preparation and skill development ❌")
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["📊 Data Analysis", "🤖 Prediction"])
 
 # ===================== PAGE 1 =====================
-if page == "📊 Data Analysis":
+st.subheader("📊 Data Visualizations")
 
-    st.title("📊 Data Analysis Dashboard")
+viz_type = st.selectbox(
+    "Select Visualization",
+    [
+        "Question-wise Average Score",
+        "Response Distribution",
+        "Correlation Heatmap",
+        "Overall Score Distribution",
+        "Boxplot Analysis"
+    ]
+)
 
-    # ---- DATA ----
-    st.subheader("Dataset Preview")
-    st.dataframe(df.head())
-     
- # Display data information
-    st.subheader("Data Information")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write("Data Shape:", df.shape)
-        st.write("Columns:", df.columns.tolist())
-    with col2:
-        buffer = pd.DataFrame({
-            'Column': df.columns,
-            'Non-Null Count': df.count().values,
-            'Data Type': df.dtypes.values
-        })
-        st.dataframe(buffer)
+# ---------------- 1. Average Score ----------------
+if viz_type == "Question-wise Average Score":
 
-    # ---- HEATMAP ----
-    st.subheader("Correlation Heatmap")
+    avg_scores = df.mean()
 
-    corr = df.corr(numeric_only=True)
+    fig, ax = plt.subplots()
+    avg_scores.plot(kind='bar', ax=ax)
+
+    ax.set_title("Average Score per Question")
+    ax.set_xlabel("Questions")
+    ax.set_ylabel("Average Score")
+
+    st.pyplot(fig)
+
+# ---------------- 2. Distribution ----------------
+elif viz_type == "Response Distribution":
+
+    fig = df.hist(figsize=(10,6))
+    st.pyplot(fig[0][0].figure)
+
+# ---------------- 3. Heatmap ----------------
+elif viz_type == "Correlation Heatmap":
+
+    corr = df.corr()
 
     fig, ax = plt.subplots(figsize=(6,5))
     sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
 
     st.pyplot(fig)
 
-    # ---- DISTRIBUTION ----
-    # st.subheader("Response Distribution")
+# ---------------- 4. Overall Score ----------------
+elif viz_type == "Overall Score Distribution":
 
-    # fig2 = df.hist(figsize=(8,6))
-    # st.pyplot(fig2[0][0].figure)
+    df["Total_Score"] = df.sum(axis=1)
+
+    fig, ax = plt.subplots()
+    ax.hist(df["Total_Score"], bins=10)
+
+    ax.set_title("Total Score Distribution")
+    ax.set_xlabel("Score")
+    ax.set_ylabel("Frequency")
+
+    st.pyplot(fig)
+
+# ---------------- 5. Boxplot ----------------
+elif viz_type == "Boxplot Analysis":
+
+    fig, ax = plt.subplots()
+    sns.boxplot(data=df, ax=ax)
+
+    ax.set_title("Boxplot of All Questions")
+
+    st.pyplot(fig)
 
 # ===================== PAGE 2 =====================
 elif page == "🤖 Prediction":
