@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("/content/How Ready Are You for Real-World Job Situations_  (Responses) - Form Responses 1.csv")
+df = pd.read_csv("How Ready Are You for Real-World Job Situations_  (Responses) - Form Responses 1.csv")
 df = df.iloc[:,2:]
 for col in df.columns:
     unique_vals = df[col].unique()
