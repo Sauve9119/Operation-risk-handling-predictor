@@ -189,14 +189,10 @@ elif page == "Model Training":
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    risk_mapping = {1: 0, 3: 1, 4: 2}
+    mapping = {1: 0, 3: 1, 4: 2}
     df['Risk'] = pd.Series(y).map(mapping)
      # Ab chart show karein
     st.bar_chart(df['Risk'].value_counts())
-
-
-    df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
-    st.bar_chart(df['Risk_cluster'].value_counts().sort_index())
 
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
