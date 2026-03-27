@@ -287,11 +287,13 @@ elif page == "Model Training":
 # ===================== PAGE 3 =====================
      
 elif page == " Prediction":
-        st.header("Predict Risk Level")
+        make_predictions()
+        def make_predictions():
+            st.header("Predict Risk Level")
 
-        if st.session_state.trained_model is None:
-             st.warning("Please train a model first in the 'Model Training' section.")
-        return
+            if st.session_state.trained_model is None:
+                  st.warning("Please train a model first")
+                  return  ✅ (अब valid है)
      
          # -------- INPUT --------
         st.subheader("Enter Input Data")
