@@ -178,7 +178,7 @@ elif page == "Model Training":
     df = df.iloc[:,2:]
      
          # ---------------- FEATURES ----------------
-    X = df.copy()
+    X = df.iloc[:,0:8]
     X_scaled = scaler.transform(X)
      
          # ---------------- TARGET ----------------
