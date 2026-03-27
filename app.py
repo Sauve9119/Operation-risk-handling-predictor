@@ -200,7 +200,7 @@ elif page == "Model Training":
     st.subheader("Risk Distribution (Low / Medium / High)")
 
     df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
-    st.bar_chart(df['Risk_cluster'].value_counts().sort_index()
+    st.bar_chart(df['Risk_cluster'].value_counts().sort_index())
 
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
