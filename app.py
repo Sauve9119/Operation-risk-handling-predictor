@@ -12,7 +12,6 @@ def load_data():
      df = df.iloc[:,2:]
      return df
 df = load_data()
-# def main():
 st.sidebar.markdown(
                   """
                   <style>
@@ -47,10 +46,10 @@ model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["📊 Data Analysis", "🤖 Prediction"])
+page = st.sidebar.radio("Go to", [" Data Analysis", "Model Training", " Prediction"])
 
 # ===================== PAGE 1 =====================
-if page == "📊 Data Analysis":
+if page == " Data Analysis":
    # ---- DATA ----
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
@@ -145,38 +144,125 @@ if page == "📊 Data Analysis":
     st.subheader("Summary Statistics of Numerical Columns")
     st.dataframe(df.describe())
 
-    def preprocess_data(df):
-         df = df.iloc[:,2:]
+    # def preprocess_data(df):
+    #      df = df.iloc[:,2:]
+     
+    #      # ---------------- FEATURES ----------------
+    #      X = df.copy()
+     
+    #      # ---------------- TARGET ----------------
+    #      # GMM clustering से labels बनाओ (same as training)
+    #      gmm = joblib.load("gmm.pkl")
+     
+    #      y = gmm.predict(X)
+     
+    #      # ---------------- SPLIT ----------------
+    #      from sklearn.model_selection import train_test_split
+     
+    #      X_train, X_test, y_train, y_test = train_test_split(
+    #          X, y, test_size=0.3, random_state=42
+    #      )
+     
+    #      # ---------------- SCALING ----------------
+    #      scaler = joblib.load("scaler.pkl")
+     
+    #      X_train = scaler.transform(X_train)
+    #      X_test = scaler.transform(X_test)
+     
+    #      return X_train, y_train, X_test, y_test
+         
+elif page == "Model Training":
+
+    st.header("Model Training")
+
+    df = df.iloc[:,2:]
      
          # ---------------- FEATURES ----------------
-         X = df.copy()
+    X = df.copy()
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
-         gmm = joblib.load("gmm.pkl")
+    gmm = joblib.load("gmm.pkl")
      
-         y = gmm.predict(X)
-     
-         # ---------------- SPLIT ----------------
-         from sklearn.model_selection import train_test_split
-     
-         X_train, X_test, y_train, y_test = train_test_split(
-             X, y, test_size=0.3, random_state=42
-         )
-     
-         # ---------------- SCALING ----------------
-         scaler = joblib.load("scaler.pkl")
-     
-         X_train = scaler.transform(X_train)
-         X_test = scaler.transform(X_test)
-     
-         return X_train, y_train, X_test, y_test
-    
+    y = gmm.predict(X)
+
+    # -------- SHOW DISTRIBUTION --------
+    st.subheader("Risk Distribution (Low / Medium / High)")
+
+    risk_df = pd.DataFrame({"Risk": y})
+    st.bar_chart(risk_df["Risk"].value_counts())
+
+    # -------- SPLIT --------
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=42
+    )
+
+    # -------- SCALE --------
+    scaler = joblib.load("scaler.pkl")
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    st.success("Preprocessing Done ✅")
+
+    # -------- MODEL SELECT --------
+    model_option = st.selectbox(
+        "Choose Model",
+        ["Logistic Regression", "Decision Tree", "SVM", "KNN"]
+    )
+
+    # -------- TRAIN --------
+    if st.button("Train Model"):
+
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.tree import DecisionTreeClassifier
+        from sklearn.svm import SVC
+        from sklearn.neighbors import KNeighborsClassifier
+
+        if model_option == "Logistic Regression":
+            model = LogisticRegression(max_iter=1000)
+
+        elif model_option == "Decision Tree":
+            model = DecisionTreeClassifier(max_depth=5)
+
+        elif model_option == "SVM":
+            model = SVC(probability=True)
+
+        else:
+            model = KNeighborsClassifier(n_neighbors=5)
+
+        model.fit(X_train, y_train)
+
+        st.session_state.trained_model = model
+
+        # -------- PREDICT --------
+        y_pred = model.predict(X_test)
+
+        from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+
+        acc = accuracy_score(y_test, y_pred)
+
+        st.subheader("Model Accuracy")
+        st.write(acc)
+
+        # -------- REPORT --------
+        st.subheader("Classification Report")
+        st.text(classification_report(y_test, y_pred))
+
+        # -------- CONFUSION MATRIX --------
+        st.subheader("Confusion Matrix")
+
+        cm = confusion_matrix(y_test, y_pred)
+
+        fig, ax = plt.subplots()
+        sns.heatmap(cm, annot=True, cmap="Blues", ax=ax)
+
+        st.pyplot(fig)
 
 
-# ===================== PAGE 2 =====================
+# ===================== PAGE 3 =====================
      
-elif page == "🤖 Prediction":
+elif page == " Prediction":
 
          st.title("🎯 Job Readiness Risk Predictor")
      
