@@ -184,27 +184,19 @@ elif page == "Model Training":
     gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
-    from sklearn.mixture import GaussianMixture
-
-# GMM model
-    gmm = GaussianMixture(n_components=3, random_state=42)
-
-# fit on full data (only for target creation)
-    gmm.fit(X)
-    prob = gmm.predict_proba(X)
-
-     # final labels (no formula)
-    y = np.argmax(prob, axis=1)
-     
-     # store in dataframe
-    df['Risk_cluster'] = y
-    cluster_means = gmm.means_.mean(axis=1)
-     
-    sorted_idx = np.argsort(cluster_means)
-    mapping = {old: new for new, old in enumerate(sorted_idx)}
+   
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
+     # Mapping dictionary banayein
+    risk_mapping = {1: 0, 3: 1, 4: 2}
+     
+     # Dataframe mein values ko map karein
+    risk_df['Risk'] = risk_df['Risk'].map(risk_mapping)
+     
+     # Ab chart show karein
+    st.bar_chart(risk_df['Risk'].value_counts())
+
 
     df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
     st.bar_chart(df['Risk_cluster'].value_counts().sort_index())
