@@ -179,6 +179,7 @@ elif page == "Model Training":
      
          # ---------------- FEATURES ----------------
     X = df.copy()
+    X = scaler.transform(X)
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
