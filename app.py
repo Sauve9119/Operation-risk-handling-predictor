@@ -13,7 +13,7 @@ def load_data():
      return df
 df = load_data()
 # def main():
-     st.sidebar.markdown(
+st.sidebar.markdown(
                   """
                   <style>
                       .footer {
@@ -33,7 +33,7 @@ df = load_data()
                   </div>
                   """,
                   unsafe_allow_html=True
-              )
+     )
 for col in df.columns:
     unique_vals = df[col].unique()
     mapping = {val: i+1 for i, val in enumerate(unique_vals)}
