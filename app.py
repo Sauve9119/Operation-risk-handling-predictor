@@ -53,7 +53,6 @@ if page == "📊 Data Analysis":
     [
         "Question-wise Average Score",
         "Response Distribution",
-        "Correlation Heatmap",
         "Overall Score Distribution",
         "Boxplot Analysis"
     ]
