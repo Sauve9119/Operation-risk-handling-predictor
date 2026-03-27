@@ -143,33 +143,6 @@ if page == " Data Analysis":
      #   summary
     st.subheader("Summary Statistics of Numerical Columns")
     st.dataframe(df.describe())
-
-    # def preprocess_data(df):
-    #      df = df.iloc[:,2:]
-     
-    #      # ---------------- FEATURES ----------------
-    #      X = df.copy()
-     
-    #      # ---------------- TARGET ----------------
-    #      # GMM clustering से labels बनाओ (same as training)
-    #      gmm = joblib.load("gmm.pkl")
-     
-    #      y = gmm.predict(X)
-     
-    #      # ---------------- SPLIT ----------------
-    #      from sklearn.model_selection import train_test_split
-     
-    #      X_train, X_test, y_train, y_test = train_test_split(
-    #          X, y, test_size=0.3, random_state=42
-    #      )
-     
-    #      # ---------------- SCALING ----------------
-    #      scaler = joblib.load("scaler.pkl")
-     
-    #      X_train = scaler.transform(X_train)
-    #      X_test = scaler.transform(X_test)
-     
-    #      return X_train, y_train, X_test, y_test
          
 elif page == "Model Training":
 
@@ -210,7 +183,7 @@ elif page == "Model Training":
     # -------- MODEL SELECT --------
     model_option = st.selectbox(
         "Choose Model",
-        ["Logistic Regression", "Decision Tree", "SVM", "KNN"]
+        ["Logistic Regression", "Decision Tree", "SVM", "KNN" , "Random Forest"]
     )
 
     # -------- TRAIN --------
@@ -220,18 +193,26 @@ elif page == "Model Training":
         from sklearn.tree import DecisionTreeClassifier
         from sklearn.svm import SVC
         from sklearn.neighbors import KNeighborsClassifier
+        from sklearn.ensemble import RandomForestClassifier
 
         if model_option == "Logistic Regression":
-            model = LogisticRegression(max_iter=1000)
+            model = LogisticRegression(C = 0.5)
 
         elif model_option == "Decision Tree":
-            model = DecisionTreeClassifier(max_depth=5)
+            model = DecisionTreeClassifier(max_depth=3)
 
         elif model_option == "SVM":
-            model = SVC(probability=True)
+            model = SVC(kernel='rbf',
+                         C= 10 ,
+                         gamma = 0.5,
+                         probability = True,
+                         random_state = 42
+                         )
+        elif model_option == "Random Forest":
+             model = RandomForestClassifier()
 
         else:
-            model = KNeighborsClassifier(n_neighbors=5)
+            model = KNeighborsClassifier(n_neighbors=3)
 
         model.fit(X_train, y_train)
 
@@ -240,16 +221,25 @@ elif page == "Model Training":
         # -------- PREDICT --------
         y_pred = model.predict(X_test)
 
-        from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+        from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
-        acc = accuracy_score(y_test, y_pred)
+        accuracy = accuracy_score(y_test, y_pred)
+        unique_classes = np.unique(y_test)
+        filtered_class_names = [class_names[i] for i in unique_classes]
 
-        st.subheader("Model Accuracy")
-        st.write(acc)
-
-        # -------- REPORT --------
-        st.subheader("Classification Report")
-        st.text(classification_report(y_test, y_pred))
+        report = classification_report(y_test, y_pred, target_names=filtered_class_names,
+                                            labels=unique_classes, output_dict=True, zero_division=0)
+        cm = confusion_matrix(y_test, y_pred, labels=unique_classes)
+                
+                # Save metrics
+        st.session_state.model_metrics = {
+                    "accuracy": accuracy,
+                    "report": report,
+                    "cm": cm,
+                    "class_names": class_names
+                }
+                
+        st.success(f"Model training completed with accuracy: {accuracy:.2f}")
 
         # -------- CONFUSION MATRIX --------
         st.subheader("Confusion Matrix")
