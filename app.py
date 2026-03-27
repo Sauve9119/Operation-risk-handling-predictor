@@ -191,9 +191,6 @@ elif page == "Model Training":
      # Mapping dictionary banayein
     risk_mapping = {1: 0, 3: 1, 4: 2}
      
-     # Dataframe mein values ko map karein
-    risk_df['Risk'] = risk_df['Risk'].map(risk_mapping)
-     
      # Ab chart show karein
     st.bar_chart(risk_df['Risk'].value_counts())
 
