@@ -326,22 +326,17 @@ elif page == " Prediction":
                  2: "🔴 High Risk"
              }
      
-             st.subheader("Prediction Result")
-             st.success(f"Predicted Risk Level: {label_map[pred]}")
+             st.subheader(f"Prediction: {labels[pred]}")
      
-             # -------- PROBABILITY --------
-             if hasattr(model, "predict_proba"):
-                 proba = model.predict_proba(input_scaled)[0]
+             # ---- PROBABILITY GRAPH ----
+             st.subheader("Confidence")
      
-                 proba_df = pd.DataFrame({
-                     "Risk Level": ["Low", "Medium", "High"],
-                     "Probability": proba
-                 })
+             prob_df = pd.DataFrame({
+                 "Risk Level": ["Low", "Medium", "High"],
+                 "Probability": probs
+             })
      
-                 fig = px.bar(proba_df, x="Risk Level", y="Probability",
-                              title="Risk Probability Distribution")
-     
-                 st.plotly_chart(fig, use_container_width=True)
+             st.bar_chart(prob_df.set_index("Risk Level"))
      
              # -------- RECOMMENDATIONS --------
              st.subheader("Suggestions")
