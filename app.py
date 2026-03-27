@@ -285,14 +285,13 @@ elif page == "Model Training":
         st.pyplot(fig)
 
 # ===================== PAGE 3 =====================
-     
-elif page == " Prediction":
-        def make_predictions():
-            st.header("Predict Risk Level")
+def make_predictions():
+        st.header("Predict Risk Level")
 
-            if st.session_state.trained_model is None:
-                  st.warning("Please train a model first")
-                  return
+        if st.session_state.trained_model is None:
+             st.warning("Please train a model first")
+             return     
+elif page == " Prediction":
         make_predictions() 
      
          # -------- INPUT --------
