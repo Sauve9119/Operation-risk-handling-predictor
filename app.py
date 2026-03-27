@@ -82,12 +82,12 @@ if page == "📊 Data Analysis":
 # # ---------------- 3. Heatmap ----------------
 #     elif viz_type == "Correlation Heatmap":
 
-#          corr = df.corr()
+         # corr = df.corr()
      
-#          fig, ax = plt.subplots(figsize=(6,5))
-#          sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+         # fig, ax = plt.subplots(figsize=(6,5))
+         # sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
      
-#          st.pyplot(fig)
+         # st.pyplot(fig)
 
 # ---------------- 4. Overall Score ----------------
     elif viz_type == "Overall Score Distribution":
@@ -115,9 +115,11 @@ if page == "📊 Data Analysis":
 
     st.subheader("Correlation Matrix")
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
-    corr_matrix = df[numeric_cols].corr()
-    fig = px.imshow(corr_matrix, text_auto=True, aspect="auto", title="Correlation Matrix")
-    st.plotly_chart(fig, use_container_width=True) 
+    corr = df.corr()
+    fig, ax = plt.subplots(figsize=(6,5))
+    sns.heatmap(corr, annot=True, cmap="coolwarm", ax=ax)
+    st.pyplot(fig)
+     
      #   summary
     st.subheader("Summary Statistics of Numerical Columns")
     st.dataframe(df.describe())
