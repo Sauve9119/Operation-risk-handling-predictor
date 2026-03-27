@@ -227,6 +227,10 @@ elif page == "Model Training":
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
+        unique_clusters = np.unique(y_train)
+        cluster_mapping = {old: new for new, old in enumerate(unique_clusters)} 
+        y_train = np.array([cluster_mapping[i] for i in y_train])
+        y_test = np.array([cluster_mapping[i] for i in y_test]) 
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
