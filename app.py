@@ -113,9 +113,9 @@ if page == "📊 Data Analysis":
      
          st.pyplot(fig)
      #   summary
-         st.subheader("Summary Statistics of Numerical Columns")
-         st.dataframe(df.describe())
-         st.subheader("Summary Statistics of Categorical Columns")
+    st.subheader("Summary Statistics of Numerical Columns")
+    st.dataframe(df.describe())
+    st.subheader("Summary Statistics of Categorical Columns")
 
     def preprocess_data(df):
          df = df.iloc[:,2:]
@@ -143,6 +143,8 @@ if page == "📊 Data Analysis":
          X_test = scaler.transform(X_test)
      
          return X_train, y_train, X_test, y_test
+    
+
 
 # ===================== PAGE 2 =====================
      
