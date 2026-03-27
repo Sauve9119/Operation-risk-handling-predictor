@@ -221,43 +221,70 @@ elif page == "Model Training":
         # -------- PREDICT --------
         y_pred = model.predict(X_test)
 
-        from sklearn.metrics import accuracy_score,classification_report, confusion_matrix
-
+        from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+     
+     # -------- ACCURACY --------
         accuracy = accuracy_score(y_test, y_pred)
-        unique_classes = np.unique(y_test)
-
-        report = classification_report(y_test, y_pred,
-                                            labels=unique_classes, output_dict=True, zero_division=0)
-        cm = confusion_matrix(y_test, y_pred, labels=unique_classes)
-                
-                # Save metrics
+     
+     # -------- LABELS (IMPORTANT) --------
+        label_map = {0: "Low", 1: "Medium", 2: "High"}
+     
+     # convert numeric → text
+        y_test_labels = [label_map[i] for i in y_test]
+        y_pred_labels = [label_map[i] for i in y_pred]
+     
+     # -------- CLASSIFICATION REPORT --------
+        report = classification_report(
+         y_test_labels,
+         y_pred_labels,
+         output_dict=True,
+         zero_division=0
+     )
+     
+     # -------- CONFUSION MATRIX --------
+        labels = ["Low", "Medium", "High"]
+     
+        cm = confusion_matrix(y_test_labels, y_pred_labels, labels=labels)
+     
+     # -------- SAVE --------
         st.session_state.model_metrics = {
-                    "accuracy": accuracy,
-                    "report": report,
-                    "cm": cm
-                }
-                
+         "accuracy": accuracy,
+         "report": report,
+         "cm": cm
+     }
+     
         st.success(f"Model training completed with accuracy: {accuracy:.2f}")
-
+     
+     # ================= DISPLAY =================
+     
         st.subheader("Model Evaluation")
-        
-        st.write(f"Accuracy: {st.session_state.model_metrics['accuracy']:.4f}")
-        
-        # Classification report
-        report_df = pd.DataFrame(st.session_state.model_metrics['report']).transpose()
-        st.write("Classification Report:")
-        st.dataframe(report_df) 
-
-        # -------- CONFUSION MATRIX --------
+     
+        st.write(f"Accuracy: {accuracy:.4f}")
+     
+     # -------- REPORT DISPLAY --------
+        st.subheader("Classification Report")
+        report_df = pd.DataFrame(report).transpose()
+        st.dataframe(report_df)
+     
+     # -------- CONFUSION MATRIX DISPLAY --------
         st.subheader("Confusion Matrix")
-
-        cm = confusion_matrix(y_test, y_pred)
-
+     
         fig, ax = plt.subplots()
-        sns.heatmap(cm, annot=True, cmap="Blues", ax=ax)
-
+     
+        sns.heatmap(
+         cm,
+         annot=True,
+         fmt='d',
+         cmap="Blues",
+         xticklabels=labels,
+         yticklabels=labels,
+         ax=ax
+     )
+     
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("Actual")
+     
         st.pyplot(fig)
-
 
 # ===================== PAGE 3 =====================
      
