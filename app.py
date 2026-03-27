@@ -234,8 +234,7 @@ elif page == "Model Training":
         st.session_state.model_metrics = {
                     "accuracy": accuracy,
                     "report": report,
-                    "cm": cm,
-                    "class_names": class_names
+                    "cm": cm
                 }
                 
         st.success(f"Model training completed with accuracy: {accuracy:.2f}")
