@@ -46,10 +46,10 @@ model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", [" Data Analysis", "Model Training", " Prediction"])
+page = st.sidebar.radio("Go to", ["Data Analysis", "Model Training", "Prediction"])
 
 # ===================== PAGE 1 =====================
-if page == " Data Analysis":
+if page == "Data Analysis":
    # ---- DATA ----
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
@@ -283,16 +283,17 @@ elif page == "Model Training":
         ax.set_ylabel("Actual")
      
         st.pyplot(fig)
-
-# ===================== PAGE 3 =====================
-             
-elif page == " Prediction":
         def make_predictions():
              st.header("Predict Risk Level")
      
              if st.session_state.trained_model is None:
                   st.warning("Please train a model first")
-                  return
+                  return 
+
+# ===================== PAGE 3 =====================
+             
+elif page == "Prediction":
+
         make_predictions() 
      
          # -------- INPUT --------
@@ -358,66 +359,3 @@ elif page == " Prediction":
                  st.markdown("- Keep improving")
                  st.markdown("- Try advanced projects")
                  st.markdown("- Build strong portfolio")
-    #      st.title("🎯 Job Readiness Risk Predictor")
-     
-    #      st.write("Rate yourself on following questions (1–5):")
-     
-    #      inputs = []
-     
-    #      col1, col2 = st.columns(2)
-     
-    #      with col1:
-    #          for i in range(4):
-    #              val = st.slider(f"Question {i+1}", 1, 5, 3)
-    #              inputs.append(val)
-     
-    #      with col2:
-    #          for i in range(4, 8):
-    #              val = st.slider(f"Question {i+1}", 1, 5, 3)
-    #              inputs.append(val)
-
-    # # ---- PREDICT ----
-    #      if st.button("Predict Risk"):
-
-             # data = np.array([inputs])
-             # data = scaler.transform(data)
-     
-             # pred = model.predict(data)[0]
-             # probs = model.predict_proba(data)[0]
-     
-    #          labels = {0:"Low Risk", 1:"Medium Risk", 2:"High Risk"}
-     
-    #          st.subheader(f"Prediction: {labels[pred]}")
-     
-    #          # ---- PROBABILITY GRAPH ----
-    #          st.subheader("Confidence")
-     
-    #          prob_df = pd.DataFrame({
-    #              "Risk Level": ["Low", "Medium", "High"],
-    #              "Probability": probs
-    #          })
-     
-    #          st.bar_chart(prob_df.set_index("Risk Level"))
-     
-    #          # ---- RECOMMENDATION ----
-    #          st.subheader("Recommendation")
-     
-    #          if pred == 2:
-    #              st.success("You are well prepared for job situations ✅")
-     
-    #          elif pred == 1:
-    #              st.warning("You need improvement in some areas ⚠️")
-    #              st.markdown("""
-    #              - Improve technical skills  
-    #              - Practice problem solving  
-    #              - Work on real-world projects  
-    #              """)
-     
-    #          else:
-    #              st.error("You need serious preparation ❌")
-    #              st.markdown("""
-    #              - Focus on basics  
-    #              - Improve communication  
-    #              - Build strong projects  
-    #              - Practice interviews  
-    #              """)
