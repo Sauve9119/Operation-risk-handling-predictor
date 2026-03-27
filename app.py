@@ -12,28 +12,28 @@ def load_data():
      df = df.iloc[:,2:]
      return df
 df = load_data()
-def main():
+# def main():
      st.sidebar.markdown(
-             """
-             <style>
-                 .footer {
-                     position: fixed;
-                     bottom: 0;
-                     left: 0;
-                     width: 100%;
-                     text-align: left;
-                     padding: 10px;
-                     font-size: 12px;
-                     color: #888;
-                 }
-             </style>
-             <div class="footer">
-                  <p>If this guess is wrong, blame the dataset not me.</p>
-                  <p>Made with 💻 by <a href="https://github.com/aashu-0" target="_blank" style="color: #007acc; text-decoration: none;">@aashu-0</a></p>
-             </div>
-             """,
-             unsafe_allow_html=True
-         )
+                  """
+                  <style>
+                      .footer {
+                          position: fixed;
+                          bottom: 0;
+                          left: 0;
+                          width: 100%;
+                          text-align: left;
+                          padding: 10px;
+                          font-size: 12px;
+                          color: #888;
+                      }
+                  </style>
+                  <div class="footer">
+                       <p>If this guess is wrong, blame the dataset not me.</p>
+                       <p>Made with 💻 by <a href="https://github.com/aashu-0" target="_blank" style="color: #007acc; text-decoration: none;">@aashu-0</a></p>
+                  </div>
+                  """,
+                  unsafe_allow_html=True
+              )
 for col in df.columns:
     unique_vals = df[col].unique()
     mapping = {val: i+1 for i, val in enumerate(unique_vals)}
