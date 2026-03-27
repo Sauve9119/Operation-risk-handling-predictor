@@ -29,7 +29,7 @@ st.sidebar.markdown(
                   </style>
                   <div class="footer">
                        <p>If this guess is wrong, blame the dataset not me.</p>
-                       <p>Made with 💻 by <a href="https://github.com/aashu-0" target="_blank" style="color: #007acc; text-decoration: none;">@aashu-0</a></p>
+                       <p>Made with 💻 by <a href="https://github.com/Sauve9119" target="_blank" style="color: #007acc; text-decoration: none;">@Rachit-gupta</a></p>
                   </div>
                   """,
                   unsafe_allow_html=True
