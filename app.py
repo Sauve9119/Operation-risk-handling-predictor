@@ -157,7 +157,7 @@ elif page == "Model Training":
     gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
-    unique_clusters = np.unique(y_train)
+    unique_clusters = np.unique(y)
     cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
     y = np.array([cluster_mapping[i] for i in y])
 
