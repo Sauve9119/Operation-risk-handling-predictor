@@ -162,7 +162,7 @@ elif page == "Model Training":
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    mapping = {1: 0, 3: 1, 4: 2}
+    mapping = {1: 0, 3: 2, 4: 1}
     df['Risk'] = pd.Series(y).map(mapping)
      # Ab chart show karein
     st.bar_chart(df['Risk'].value_counts())
