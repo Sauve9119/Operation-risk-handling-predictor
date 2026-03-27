@@ -184,12 +184,23 @@ elif page == "Model Training":
     gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
+    prob = gmm.predict_proba(X)
+
+     # final labels (no formula)
+    y = np.argmax(prob, axis=1)
+     
+     # store in dataframe
+    df['Risk_cluster'] = y
+    cluster_means = gmm.means_.mean(axis=1)
+     
+    sorted_idx = np.argsort(cluster_means)
+    mapping = {old: new for new, old in enumerate(sorted_idx)}
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
 
-    risk_df = pd.DataFrame({"Risk": y})
-    st.bar_chart(risk_df["Risk"].value_counts())
+    df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
+    st.bar_chart(df['Risk_cluster'].value_counts().sort_index()
 
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
