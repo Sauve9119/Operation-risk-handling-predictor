@@ -115,7 +115,6 @@ if page == "📊 Data Analysis":
      #   summary
     st.subheader("Summary Statistics of Numerical Columns")
     st.dataframe(df.describe())
-    st.subheader("Summary Statistics of Categorical Columns")
 
     def preprocess_data(df):
          df = df.iloc[:,2:]
