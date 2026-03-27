@@ -179,13 +179,13 @@ elif page == "Model Training":
      
          # ---------------- FEATURES ----------------
     X = df.copy()
-    X = scaler.transform(X)
+    X_scaled = scaler.transform(X)
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
     gmm = joblib.load("gmm.pkl")
      
-    y = gmm.predict(X)
+    y = gmm.predict(X_scaled)
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
