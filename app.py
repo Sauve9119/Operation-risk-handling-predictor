@@ -190,9 +190,9 @@ elif page == "Model Training":
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
     risk_mapping = {1: 0, 3: 1, 4: 2}
-     
+    df['Risk'] = pd.Series(y).map(mapping)
      # Ab chart show karein
-    st.bar_chart(risk_df['Risk'].value_counts())
+    st.bar_chart(df['Risk'].value_counts())
 
 
     df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
