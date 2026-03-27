@@ -174,8 +174,6 @@ if page == " Data Analysis":
 elif page == "Model Training":
 
     st.header("Model Training")
-
-    df = df.iloc[:,2:]
      
          # ---------------- FEATURES ----------------
     X = df.iloc[:,0:8]
