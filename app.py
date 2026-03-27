@@ -291,7 +291,7 @@ elif page == " Prediction":
 
         if st.session_state.trained_model is None:
              st.warning("Please train a model first in the 'Model Training' section.")
-             return
+        return
      
          # -------- INPUT --------
         st.subheader("Enter Input Data")
