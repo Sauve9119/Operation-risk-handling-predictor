@@ -239,6 +239,15 @@ elif page == "Model Training":
                 
         st.success(f"Model training completed with accuracy: {accuracy:.2f}")
 
+        st.subheader("Model Evaluation")
+        
+        st.write(f"Accuracy: {st.session_state.model_metrics['accuracy']:.4f}")
+        
+        # Classification report
+        report_df = pd.DataFrame(st.session_state.model_metrics['report']).transpose()
+        st.write("Classification Report:")
+        st.dataframe(report_df) 
+
         # -------- CONFUSION MATRIX --------
         st.subheader("Confusion Matrix")
 
