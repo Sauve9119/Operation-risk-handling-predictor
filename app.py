@@ -293,7 +293,6 @@ elif page == "Model Training":
 # ===================== PAGE 3 =====================
              
 elif page == "Prediction":
-
         make_predictions() 
      
          # -------- INPUT --------
