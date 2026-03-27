@@ -320,7 +320,7 @@ elif page == " Prediction":
              probs = model.predict_proba(data)[0]
      
              # -------- LABEL MAP --------
-             label_map = {
+             labels = {
                  0: "🟢 Low Risk",
                  1: "🟡 Medium Risk",
                  2: "🔴 High Risk"
