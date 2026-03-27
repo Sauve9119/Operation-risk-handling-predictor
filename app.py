@@ -156,7 +156,7 @@ elif page == "Model Training":
          # GMM clustering से labels बनाओ (same as training)
     gmm = joblib.load("gmm.pkl")
      
-    y = gmm.predict(X_scaled)
+    y = gmm.predict(X)
     unique_clusters = np.unique(y)
     cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
     y = np.array([cluster_mapping[i] for i in y])
