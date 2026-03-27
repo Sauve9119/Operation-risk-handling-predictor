@@ -282,79 +282,80 @@ elif page == "Model Training":
         ax.set_xlabel("Predicted")
         ax.set_ylabel("Actual")
      
-        st.pyplot(fig)
-        def make_predictions():
+        st.pyplot(fig) 
+
+# ===================== PAGE 3 =====================
+def make_predictions():
              st.header("Predict Risk Level")
      
              if st.session_state.trained_model is None:
                   st.warning("Please train a model first")
-                  return 
-
-# ===================== PAGE 3 =====================
-             
+                  return
+                   # -------- INPUT --------
+             st.subheader("Enter Input Data")
+          
+             col1, col2 = st.columns(2)
+          
+             with col1:
+                  for i in range(4):
+                           val = st.slider(f"Question {i+1}", 1, 5, 3)
+                           inputs.append(val)
+               
+             with col2:
+                  for i in range(4, 8):
+                           val = st.slider(f"Question {i+1}", 1, 5, 3)
+                           inputs.append(val)
+              # -------- CREATE INPUT --------
+          
+             if st.button("Predict Risk"):
+          
+                  data = np.array([inputs])
+                  data = scaler.transform(data)
+          
+                  pred = model.predict(data)[0]
+                  probs = model.predict_proba(data)[0]
+          
+                  # -------- LABEL MAP --------
+                  labels = {
+                      0: "🟢 Low Risk",
+                      1: "🟡 Medium Risk",
+                      2: "🔴 High Risk"
+                  }
+          
+                  st.subheader(f"Prediction: {labels[pred]}")
+          
+                  # ---- PROBABILITY GRAPH ----
+                  st.subheader("Confidence")
+          
+                  prob_df = pd.DataFrame({
+                      "Risk Level": ["Low", "Medium", "High"],
+                      "Probability": probs
+                  })
+          
+                  st.bar_chart(prob_df.set_index("Risk Level"))
+          
+                  # -------- RECOMMENDATIONS --------
+                  st.subheader("Suggestions")
+          
+                  if pred == 2:
+                      st.error("⚠️ High Risk: Improve skills & consistency")
+                      st.markdown("- Focus on basics")
+                      st.markdown("- Improve CGPA")
+                      st.markdown("- Work on real projects")
+          
+                  elif pred == 1:
+                      st.warning("⚠️ Medium Risk: You are average, push harder")
+                      st.markdown("- Improve technical skills")
+                      st.markdown("- Do internships")
+                      st.markdown("- Practice coding")
+          
+                  else:
+                      st.success("✅ Low Risk: You're on the right track")
+                      st.markdown("- Keep improving")
+                      st.markdown("- Try advanced projects")
+                      st.markdown("- Build strong portfolio")
+     
 elif page == "Prediction":
         make_predictions() 
      
-         # -------- INPUT --------
-        st.subheader("Enter Input Data")
-     
-        col1, col2 = st.columns(2)
-     
-        with col1:
-             for i in range(4):
-                      val = st.slider(f"Question {i+1}", 1, 5, 3)
-                      inputs.append(val)
-          
-        with col2:
-             for i in range(4, 8):
-                      val = st.slider(f"Question {i+1}", 1, 5, 3)
-                      inputs.append(val)
-         # -------- CREATE INPUT --------
-     
-        if st.button("Predict Risk"):
-     
-             data = np.array([inputs])
-             data = scaler.transform(data)
-     
-             pred = model.predict(data)[0]
-             probs = model.predict_proba(data)[0]
-     
-             # -------- LABEL MAP --------
-             labels = {
-                 0: "🟢 Low Risk",
-                 1: "🟡 Medium Risk",
-                 2: "🔴 High Risk"
-             }
-     
-             st.subheader(f"Prediction: {labels[pred]}")
-     
-             # ---- PROBABILITY GRAPH ----
-             st.subheader("Confidence")
-     
-             prob_df = pd.DataFrame({
-                 "Risk Level": ["Low", "Medium", "High"],
-                 "Probability": probs
-             })
-     
-             st.bar_chart(prob_df.set_index("Risk Level"))
-     
-             # -------- RECOMMENDATIONS --------
-             st.subheader("Suggestions")
-     
-             if pred == 2:
-                 st.error("⚠️ High Risk: Improve skills & consistency")
-                 st.markdown("- Focus on basics")
-                 st.markdown("- Improve CGPA")
-                 st.markdown("- Work on real projects")
-     
-             elif pred == 1:
-                 st.warning("⚠️ Medium Risk: You are average, push harder")
-                 st.markdown("- Improve technical skills")
-                 st.markdown("- Do internships")
-                 st.markdown("- Practice coding")
-     
-             else:
-                 st.success("✅ Low Risk: You're on the right track")
-                 st.markdown("- Keep improving")
-                 st.markdown("- Try advanced projects")
-                 st.markdown("- Build strong portfolio")
+        
