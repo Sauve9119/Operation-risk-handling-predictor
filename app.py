@@ -287,88 +287,80 @@ elif page == "Model Training":
 # ===================== PAGE 3 =====================
      
 elif page == " Prediction":
-           def make_predictions():
-    st.header("Predict Risk Level")
+        st.header("Predict Risk Level")
 
-    if st.session_state.trained_model is None:
-        st.warning("⚠️ Please train a model first")
-        return
-
-    # -------- INPUT --------
-    st.subheader("Enter Input Data")
-
-    col1, col2 = st.columns(2)
-
-     with col1:
-             for i in range(4):
-                 val = st.slider(f"Question {i+1}", 1, 5, 3)
-                 inputs.append(val)
+        if st.session_state.trained_model is None:
+             st.warning("⚠️ Please train a model first")
+             return
      
-     with col2:
+         # -------- INPUT --------
+        st.subheader("Enter Input Data")
+     
+        col1, col2 = st.columns(2)
+     
+        with col1:
+             for i in range(4):
+                      val = st.slider(f"Question {i+1}", 1, 5, 3)
+                      inputs.append(val)
+          
+        with col2:
              for i in range(4, 8):
-                 val = st.slider(f"Question {i+1}", 1, 5, 3)
-                 inputs.append(val)
-    # -------- CREATE INPUT --------
-    input_data = np.array([[age, studying_yr, cgpa, tech, skill, career]])
-
-    if st.button("Predict Risk"):
-
-        import joblib
-
-        # -------- LOAD SCALER --------
-        scaler = joblib.load("scaler.pkl")
-
-        # 🔥 IMPORTANT: scale same as training
-        input_scaled = scaler.transform(input_data)
-
-        # -------- PREDICT --------
-        model = st.session_state.trained_model
-        pred = model.predict(input_scaled)[0]
-
-        # -------- LABEL MAP --------
-        label_map = {
-            0: "🟢 Low Risk",
-            1: "🟡 Medium Risk",
-            2: "🔴 High Risk"
-        }
-
-        st.subheader("Prediction Result")
-        st.success(f"Predicted Risk Level: {label_map[pred]}")
-
-        # -------- PROBABILITY --------
-        if hasattr(model, "predict_proba"):
-            proba = model.predict_proba(input_scaled)[0]
-
-            proba_df = pd.DataFrame({
-                "Risk Level": ["Low", "Medium", "High"],
-                "Probability": proba
-            })
-
-            fig = px.bar(proba_df, x="Risk Level", y="Probability",
-                         title="Risk Probability Distribution")
-
-            st.plotly_chart(fig, use_container_width=True)
-
-        # -------- RECOMMENDATIONS --------
-        st.subheader("Suggestions")
-
-        if pred == 2:
-            st.error("⚠️ High Risk: Improve skills & consistency")
-            st.markdown("- Focus on basics")
-            st.markdown("- Improve CGPA")
-            st.markdown("- Work on real projects")
-
-        elif pred == 1:
-            st.warning("⚠️ Medium Risk: You are average, push harder")
-            st.markdown("- Improve technical skills")
-            st.markdown("- Do internships")
-            st.markdown("- Practice coding")
-
-        else:
-            st.success("✅ Low Risk: You're on the right track")
-            st.markdown("- Keep improving")
-            st.markdown("- Try advanced projects")
-            st.markdown("- Build strong portfolio")
+                      val = st.slider(f"Question {i+1}", 1, 5, 3)
+                      inputs.append(val)
+         # -------- CREATE INPUT --------
+     
+        if st.button("Predict Risk"):
+     
+             data = np.array([inputs])
+             data = scaler.transform(data)
+     
+             pred = model.predict(data)[0]
+             probs = model.predict_proba(data)[0]
+     
+             # -------- LABEL MAP --------
+             label_map = {
+                 0: "🟢 Low Risk",
+                 1: "🟡 Medium Risk",
+                 2: "🔴 High Risk"
+             }
+     
+             st.subheader("Prediction Result")
+             st.success(f"Predicted Risk Level: {label_map[pred]}")
+     
+             # -------- PROBABILITY --------
+             if hasattr(model, "predict_proba"):
+                 proba = model.predict_proba(input_scaled)[0]
+     
+                 proba_df = pd.DataFrame({
+                     "Risk Level": ["Low", "Medium", "High"],
+                     "Probability": proba
+                 })
+     
+                 fig = px.bar(proba_df, x="Risk Level", y="Probability",
+                              title="Risk Probability Distribution")
+     
+                 st.plotly_chart(fig, use_container_width=True)
+     
+             # -------- RECOMMENDATIONS --------
+             st.subheader("Suggestions")
+     
+             if pred == 2:
+                 st.error("⚠️ High Risk: Improve skills & consistency")
+                 st.markdown("- Focus on basics")
+                 st.markdown("- Improve CGPA")
+                 st.markdown("- Work on real projects")
+     
+             elif pred == 1:
+                 st.warning("⚠️ Medium Risk: You are average, push harder")
+                 st.markdown("- Improve technical skills")
+                 st.markdown("- Do internships")
+                 st.markdown("- Practice coding")
+     
+             else:
+                 st.success("✅ Low Risk: You're on the right track")
+                 st.markdown("- Keep improving")
+                 st.markdown("- Try advanced projects")
+                 st.markdown("- Build strong portfolio")
     #      st.title("🎯 Job Readiness Risk Predictor")
      
     #      st.write("Rate yourself on following questions (1–5):")
@@ -390,11 +382,11 @@ elif page == " Prediction":
     # # ---- PREDICT ----
     #      if st.button("Predict Risk"):
 
-    #          data = np.array([inputs])
-    #          data = scaler.transform(data)
+             # data = np.array([inputs])
+             # data = scaler.transform(data)
      
-    #          pred = model.predict(data)[0]
-    #          probs = model.predict_proba(data)[0]
+             # pred = model.predict(data)[0]
+             # probs = model.predict_proba(data)[0]
      
     #          labels = {0:"Low Risk", 1:"Medium Risk", 2:"High Risk"}
      
