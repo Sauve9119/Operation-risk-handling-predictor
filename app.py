@@ -184,6 +184,13 @@ elif page == "Model Training":
     gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
+    from sklearn.mixture import GaussianMixture
+
+# GMM model
+    gmm = GaussianMixture(n_components=3, random_state=42)
+
+# fit on full data (only for target creation)
+    gmm.fit(X)
     prob = gmm.predict_proba(X)
 
      # final labels (no formula)
