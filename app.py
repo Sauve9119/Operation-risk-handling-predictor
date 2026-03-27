@@ -225,7 +225,6 @@ elif page == "Model Training":
 
         accuracy = accuracy_score(y_test, y_pred)
         unique_classes = np.unique(y_test)
-        filtered_class_names = [class_names[i] for i in unique_classes]
 
         report = classification_report(y_test, y_pred,
                                             labels=unique_classes, output_dict=True, zero_division=0)
