@@ -157,7 +157,9 @@ elif page == "Model Training":
     gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
-   
+    unique_clusters = np.unique(y_train)
+    cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
+    y = np.array([cluster_mapping[i] for i in y])
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
@@ -170,7 +172,7 @@ elif page == "Model Training":
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42
+        X_scaled, y, test_size=0.3, random_state=42
     )
 
     # -------- SCALE --------
@@ -227,10 +229,8 @@ elif page == "Model Training":
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
-        unique_clusters = np.unique(y_train)
-        cluster_mapping = {old: new for new, old in enumerate(unique_clusters)} 
-        y_train = np.array([cluster_mapping[i] for i in y_train])
-        y_test = np.array([cluster_mapping[i] for i in y_test]) 
+        # y_train = np.array([cluster_mapping[i] for i in y_train])
+        # y_test = np.array([cluster_mapping[i] for i in y_test]) 
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
