@@ -156,7 +156,7 @@ elif page == "Model Training":
          # GMM clustering से labels बनाओ (same as training)
     gmm = joblib.load("gmm.pkl")
      
-    y = gmm.predict(X)
+    y = gmm.predict(X_scaled)
     unique_clusters = np.unique(y)
     cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
     y = np.array([cluster_mapping[i] for i in y])
@@ -164,22 +164,18 @@ elif page == "Model Training":
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    mapping = {1: 0, 3: 2, 4: 1}
-    df['Risk'] = pd.Series(y).map(mapping)
+    risk_df = pd.DataFrame({"Risk":y})
      # Ab chart show karein
-    st.bar_chart(df['Risk'].value_counts())
+    st.bar_chart(risk_df['Risk'].value_counts())
 
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3, random_state=42
+        X_scaled, y, test_size=0.3, random_state=42
     )
 
     # -------- SCALE --------
     scaler = joblib.load("scaler.pkl")
-    X_train = scaler.transform(X_train)
-    X_test = scaler.transform(X_test)
-
     st.success("Preprocessing Done ✅")
 
     # -------- MODEL SELECT --------
@@ -229,8 +225,6 @@ elif page == "Model Training":
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
-        # y_train = np.array([cluster_mapping[i] for i in y_train])
-        # y_test = np.array([cluster_mapping[i] for i in y_test]) 
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
