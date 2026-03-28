@@ -323,8 +323,9 @@ def make_predictions():
                   data = np.array([inputs])
                   data = scaler.transform(data)
           
-                  pred = model.predict(data)[0]
-                  probs = model.predict_proba(data)[0]
+                  active_model = st.session_state.trained_model if st.session_state.trained_model else default_model
+                  pred = active_model.predict(data)[0]
+                  probs = active_model.predict_proba(data)[0]
           
                   # -------- LABEL MAP --------
                   labels = {
