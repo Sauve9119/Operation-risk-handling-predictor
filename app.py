@@ -234,7 +234,7 @@ def model_training():
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
-        label_map = {0: "Low", 1: "Medium", 2: "High"}
+        label_map = {0: "Very Low", 1: "Low", 2: "Medium" , 3: "High" , 4 : "Very High"}
      
      # convert numeric → text
         y_test_labels = [label_map[i] for i in y_test]
