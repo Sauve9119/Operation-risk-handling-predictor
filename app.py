@@ -166,7 +166,6 @@ def model_training():
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
-    gmm = joblib.load("gmm.pkl")
      
     y = gmm.predict(X_scaled)
     unique_clusters = np.unique(y)
@@ -342,7 +341,7 @@ def make_predictions():
                       2: "🔴 High Risk"
                   }
           
-                  st.subheader(f"Prediction: {labels[pred]}")
+                  st.subheader(f"Prediction: {labels.get(pred, 'Unknown')}")
           
                   # ---- PROBABILITY GRAPH ----
                   st.subheader("Confidence")
