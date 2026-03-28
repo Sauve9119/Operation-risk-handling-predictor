@@ -160,18 +160,32 @@ def model_training():
     st.header("Model Training")
      
          # ---------------- FEATURES ----------------
+    # SAME AS COLAB
     X = df.iloc[:,0:8]
-    X_scaled = scaler.transform(X)
-     
-         # ---------------- TARGET ----------------
-         # GMM clustering से labels बनाओ (same as training)
-    prob = gmm.predict_proba(X_scaled)   
-    y = np.argmax(prob, axis=1)
+    
+    # split FIRST
+    X_train, X_test = train_test_split(X, test_size=0.3, random_state=42)
+    
+    # GMM same way use karo
+    train_prob = gmm.predict_proba(X_train)
+    test_prob = gmm.predict_proba(X_test)
+    
+    y_train = np.argmax(train_prob, axis=1)
+    y_test = np.argmax(test_prob, axis=1)
+    
+    # mapping
     cluster_means = gmm.means_.mean(axis=1)
     sorted_idx = np.argsort(cluster_means)
     mapping = {old: new for new, old in enumerate(sorted_idx)}
-    y = np.array([mapping[i] for i in y])
-    label_map = {0: "Low Risk", 1: "Medium Risk", 2: "High Risk"}
+    
+    y_train = np.array([mapping[i] for i in y_train])
+    y_test = np.array([mapping[i] for i in y_test])
+    
+    # NOW scale
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+     
+         # ---------------- TARGET ----------------
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
@@ -181,10 +195,6 @@ def model_training():
     st.bar_chart(risk_df['Risk'].value_counts())
 
     # -------- SPLIT --------
-    from sklearn.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(
-        X_scaled, y, test_size=0.3, random_state=42
-    )
 
     st.success("Preprocessing Done ✅")
 
