@@ -296,6 +296,7 @@ def model_training():
         st.pyplot(fig) 
 
 def make_predictions():
+    inputs = []
     st.header("Predict Risk Level")
      
     if st.session_state.trained_model is None:
@@ -308,12 +309,12 @@ def make_predictions():
           
     with col1:
                  for i in range(4):
-                           val = st.slider(f"Question {i+1}", 1, 5, 3)
+                           val = st.slider(f"Question {i+1}", 1, 5, 3,key=f"q_a_{i}")
                            inputs.append(val)
                
     with col2:
                  for i in range(4, 8):
-                           val = st.slider(f"Question {i+1}", 1, 5, 3)
+                           val = st.slider(f"Question {i+1}", 1, 5, 3,key=f"q_b_{i}")
                            inputs.append(val)
               # -------- CREATE INPUT --------
           
