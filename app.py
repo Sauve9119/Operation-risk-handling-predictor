@@ -12,6 +12,12 @@ def load_data():
      df = df.iloc[:,2:]
      return df
 df = load_data()
+if page == "Data Exploration":
+        data_exploration()
+elif page == "Model Training":
+        model_training()
+elif page == "Predictions":
+        make_predictions()
 st.sidebar.markdown(
                   """
                   <style>
@@ -49,7 +55,7 @@ st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Data Analysis", "Model Training", "Prediction"])
 
 # ===================== PAGE 1 =====================
-if page == "Data Analysis":
+def data_exploration():
    # ---- DATA ----
     st.subheader("Dataset Preview")
     st.dataframe(df.head())
@@ -144,7 +150,7 @@ if page == "Data Analysis":
     st.subheader("Summary Statistics of Numerical Columns")
     st.dataframe(df.describe())
          
-elif page == "Model Training":
+def model_training():
 
     st.header("Model Training")
      
@@ -286,30 +292,30 @@ elif page == "Model Training":
 
 # ===================== PAGE 3 =====================
      
-elif page == "Prediction":
-        def make_predictions():
-             st.header("Predict Risk Level")
+def make_predictions():
+        
+        st.header("Predict Risk Level")
      
-             if st.session_state.trained_model is None:
+        if st.session_state.trained_model is None:
                   st.warning("Please train a model first")
                   return
                    # -------- INPUT --------
-             st.subheader("Enter Input Data")
+        st.subheader("Enter Input Data")
           
-             col1, col2 = st.columns(2)
+        col1, col2 = st.columns(2)
           
-             with col1:
+        with col1:
                   for i in range(4):
                            val = st.slider(f"Question {i+1}", 1, 5, 3)
                            inputs.append(val)
                
-             with col2:
+        with col2:
                   for i in range(4, 8):
                            val = st.slider(f"Question {i+1}", 1, 5, 3)
                            inputs.append(val)
               # -------- CREATE INPUT --------
           
-             if st.button("Predict Risk"):
+        if st.button("Predict Risk"):
           
                   data = np.array([inputs])
                   data = scaler.transform(data)
@@ -355,7 +361,4 @@ elif page == "Prediction":
                       st.success("✅ Low Risk: You're on the right track")
                       st.markdown("- Keep improving")
                       st.markdown("- Try advanced projects")
-                      st.markdown("- Build strong portfolio")
-        make_predictions(df) 
-     
-        
+                      st.markdown("- Build strong portfolio")  
