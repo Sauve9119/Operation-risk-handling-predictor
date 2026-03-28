@@ -14,7 +14,7 @@ def load_data():
 df = load_data()
 # ---------------- SIDEBAR ----------------
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Data Analysis", "Model Training", "Prediction"])
+page = st.sidebar.radio("Go to", ["Data Exploration", "Model Training", "Predictions"])
 
 if page == "Data Exploration":
         data_exploration()
