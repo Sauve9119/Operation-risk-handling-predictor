@@ -22,7 +22,8 @@ if 'model_metrics' not in st.session_state:
     st.session_state.model_metrics = None
 
 # --- DATA LOADING ---
-# @st.cache_data
+
+@st.cache_data
 def load_data():
     # Update the filename here if needed
     try:
@@ -57,6 +58,8 @@ def load_assets():
         return None, None, None
 
 # Assets load karein
+st.cache_data.clear()
+st.cache_resource.clear()
 scaler, gmm, default_model = load_assets()
 
 # --- PAGE FUNCTIONS ---
