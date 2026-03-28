@@ -167,7 +167,9 @@ def model_training():
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
      
-    y = gmm.predict(X_scaled)
+    y = gmm.predict(X)
+    prob = gmm.predict_proba(X)   # NO scaling here
+    y = np.argmax(prob, axis=1)
     cluster_means = gmm.means_.mean(axis=1)
     sorted_idx = np.argsort(cluster_means)
     mapping = {old: new for new, old in enumerate(sorted_idx)}
