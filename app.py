@@ -57,7 +57,11 @@ def load_assets():
         st.error(f"Error loading .pkl files: {e}")
         return None, None, None
 
-scaler, gmm, default_model = load_assets()
+# Assets load karein
+assets = load_assets()
+scaler = assets[0]
+gmm = assets[1]
+default_model = assets[2]
 
 # --- PAGE FUNCTIONS ---
 
