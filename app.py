@@ -4,8 +4,6 @@ import joblib
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-if 'trained_model' not in st.session_state:
-    st.session_state.trained_model = None
 
 st.set_page_config(page_title="Job Readiness Predictor", layout="wide")
 @st.cache_data
@@ -18,33 +16,40 @@ df = load_data()
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Data Exploration", "Model Training", "Predictions"])
 
-if page == "Data Exploration":
+def main():
+    # Initialize session state variables if they don't exist
+    if 'trained_model' not in st.session_state:
+        st.session_state.trained_model = None
+    if 'model_metrics' not in st.session_state:
+        st.session_state.model_metrics = {}
+    
+    if page == "Data Exploration":
         data_exploration()
-elif page == "Model Training":
+    elif page == "Model Training":
         model_training()
-elif page == "Predictions":
+    elif page == "Predictions":
         make_predictions()
-st.sidebar.markdown(
-                  """
-                  <style>
-                      .footer {
-                          position: fixed;
-                          bottom: 0;
-                          left: 0;
-                          width: 100%;
-                          text-align: left;
-                          padding: 10px;
-                          font-size: 12px;
-                          color: #888;
-                      }
-                  </style>
-                  <div class="footer">
-                       <p>If this guess is wrong, blame the dataset not me.</p>
-                       <p>Made with 💻 by <a href="https://github.com/Sauve9119" target="_blank" style="color: #007acc; text-decoration: none;">@Rachit-gupta</a></p>
-                  </div>
-                  """,
-                  unsafe_allow_html=True
-     )
+    st.sidebar.markdown(
+                      """
+                      <style>
+                          .footer {
+                              position: fixed;
+                              bottom: 0;
+                              left: 0;
+                              width: 100%;
+                              text-align: left;
+                              padding: 10px;
+                              font-size: 12px;
+                              color: #888;
+                          }
+                      </style>
+                      <div class="footer">
+                           <p>If this guess is wrong, blame the dataset not me.</p>
+                           <p>Made with 💻 by <a href="https://github.com/Sauve9119" target="_blank" style="color: #007acc; text-decoration: none;">@Rachit-gupta</a></p>
+                      </div>
+                      """,
+                      unsafe_allow_html=True
+         )
 for col in df.columns:
     unique_vals = df[col].unique()
     mapping = {val: i+1 for i, val in enumerate(unique_vals)}
