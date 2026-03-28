@@ -298,26 +298,26 @@ def model_training():
 def make_predictions():
     st.header("Predict Risk Level")
      
-        if st.session_state.trained_model is None:
-                  st.warning("Please train a model first")
-                  return
+    if st.session_state.trained_model is None:
+                 st.warning("Please train a model first")
+                 return
                    # -------- INPUT --------
-        st.subheader("Enter Input Data")
+    st.subheader("Enter Input Data")
           
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
           
-        with col1:
-                  for i in range(4):
+    with col1:
+                 for i in range(4):
                            val = st.slider(f"Question {i+1}", 1, 5, 3)
                            inputs.append(val)
                
-        with col2:
-                  for i in range(4, 8):
+    with col2:
+                 for i in range(4, 8):
                            val = st.slider(f"Question {i+1}", 1, 5, 3)
                            inputs.append(val)
               # -------- CREATE INPUT --------
           
-        if st.button("Predict Risk"):
+    if st.button("Predict Risk"):
           
                   data = np.array([inputs])
                   data = scaler.transform(data)
