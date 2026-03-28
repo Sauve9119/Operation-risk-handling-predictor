@@ -285,7 +285,9 @@ elif page == "Model Training":
         st.pyplot(fig) 
 
 # ===================== PAGE 3 =====================
-def make_predictions():
+     
+elif page == "Prediction":
+        def make_predictions():
              st.header("Predict Risk Level")
      
              if st.session_state.trained_model is None:
@@ -354,8 +356,6 @@ def make_predictions():
                       st.markdown("- Keep improving")
                       st.markdown("- Try advanced projects")
                       st.markdown("- Build strong portfolio")
-     
-elif page == "Prediction":
         make_predictions() 
      
         
