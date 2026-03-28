@@ -186,8 +186,6 @@ def model_training():
         X_scaled, y, test_size=0.3, random_state=42
     )
 
-    # -------- SCALE --------
-    scaler = joblib.load("scaler.pkl")
     st.success("Preprocessing Done ✅")
 
     # -------- MODEL SELECT --------
@@ -324,9 +322,18 @@ def make_predictions():
                   data = np.array([inputs])
                   data = scaler.transform(data)
           
-                  active_model = st.session_state.trained_model if st.session_state.trained_model else default_model
+                  if st.session_state.trained_model is not None:
+                        active_model = st.session_state.trained_model
+                  elif default_model is not None:
+                        active_model = default_model
+                  else:
+                        st.error("No model available. Please train model first.")
+                        return
                   pred = active_model.predict(data)[0]
-                  probs = active_model.predict_proba(data)[0]
+                  if hasattr(active_model, "predict_proba"):
+                        probs = active_model.predict_proba(data)[0]
+                  else:
+                        probs = np.zeros(3)  # fallback
           
                   # -------- LABEL MAP --------
                   labels = {
