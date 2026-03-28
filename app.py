@@ -58,10 +58,7 @@ def load_assets():
         return None, None, None
 
 # Assets load karein
-assets = load_assets()
-scaler = assets[0]
-gmm = assets[1]
-default_model = assets[2]
+scaler, gmm, default_model = load_assets()
 
 # --- PAGE FUNCTIONS ---
 
