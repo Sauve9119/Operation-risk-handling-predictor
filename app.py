@@ -22,7 +22,6 @@ if 'model_metrics' not in st.session_state:
     st.session_state.model_metrics = None
 
 # --- DATA LOADING ---
-
 @st.cache_data
 def load_data():
     # Update the filename here if needed
@@ -32,7 +31,7 @@ def load_data():
         
         # Numeric Mapping
         for col in df.columns:
-            unique_vals = sorted(df[col].unique()) # Sorted takay order na badle
+            unique_vals = df[col].unique()
             mapping = {val: i+1 for i, val in enumerate(unique_vals)}
             df[col] = df[col].map(mapping)
         return df
@@ -43,6 +42,7 @@ def load_data():
 df = load_data()
 
 # --- MODEL LOADING ---
+@st.cache_resource
 def load_assets():
     try:
         scaler = joblib.load("scaler.pkl")
@@ -58,8 +58,6 @@ def load_assets():
         return None, None, None
 
 # Assets load karein
-st.cache_data.clear()
-st.cache_resource.clear()
 scaler, gmm, default_model = load_assets()
 
 # --- PAGE FUNCTIONS ---
@@ -161,45 +159,31 @@ def data_exploration():
 
 def model_training():
     st.header("Model Training")
-    
+     
          # ---------------- FEATURES ----------------
-    # SAME AS COLAB
     X = df.iloc[:,0:8]
-    
-    # split FIRST
-    X_train, X_test = train_test_split(X, test_size=0.3, random_state=42)
-    
-    # GMM same way use karo
-    train_prob = gmm.predict_proba(X_train)
-    test_prob = gmm.predict_proba(X_test)
-    
-    y_train = np.argmax(train_prob, axis=1)
-    y_test = np.argmax(test_prob, axis=1)
-    
-    # mapping
-    cluster_means = gmm.means_.mean(axis=1)
-    sorted_idx = np.argsort(cluster_means)
-    mapping = {old: new for new, old in enumerate(sorted_idx)}
-    
-    y_train = np.array([mapping[i] for i in y_train])
-    y_test = np.array([mapping[i] for i in y_test])
-    
-    # NOW scale
-    X_train = scaler.transform(X_train)
-    X_test = scaler.transform(X_test)
+    X_scaled = scaler.transform(X)
      
          # ---------------- TARGET ----------------
-    st.write("GMM components:", gmm.n_components)
-    st.write("train_prob shape:", train_prob.shape)
+         # GMM clustering से labels बनाओ (same as training)
+     
+    y = gmm.predict(X_scaled)
+    unique_clusters = np.unique(y)
+    cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
+    y = np.array([cluster_mapping[i] for i in y])
+
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    y = np.concatenate([y_train, y_test])
-
-    risk_df = pd.DataFrame({"Risk": y})
+    risk_df = pd.DataFrame({"Risk":y})
+     # Ab chart show karein
     st.bar_chart(risk_df['Risk'].value_counts())
 
     # -------- SPLIT --------
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(
+        X_scaled, y, test_size=0.3, random_state=42
+    )
 
     st.success("Preprocessing Done ✅")
 
@@ -253,8 +237,8 @@ def model_training():
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
-        y_test_labels = [label_map.get(int(i), "Unknown") for i in y_test]
-        y_pred_labels = [label_map.get(int(i), "Unknown") for i in y_pred]
+        y_test_labels = [label_map[i] for i in y_test]
+        y_pred_labels = [label_map[i] for i in y_pred]
      
      # -------- CLASSIFICATION REPORT --------
         report = classification_report(
