@@ -42,7 +42,6 @@ def load_data():
 df = load_data()
 
 # --- MODEL LOADING ---
-@st.cache_resource
 def load_assets():
     try:
         scaler = joblib.load("scaler.pkl")
