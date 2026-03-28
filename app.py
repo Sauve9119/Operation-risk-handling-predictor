@@ -167,7 +167,7 @@ def model_training():
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
      
-    y = gmm.predict(X)
+    y = gmm.predict(X_scaled)
     unique_clusters = np.unique(y)
     cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
     y = np.array([cluster_mapping[i] for i in y])
@@ -234,7 +234,7 @@ def model_training():
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
-        label_map = {0: "Very Low", 1: "Low", 2: "Medium" , 3: "High" , 4 : "Very High"}
+        label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
         y_test_labels = [label_map[i] for i in y_test]
