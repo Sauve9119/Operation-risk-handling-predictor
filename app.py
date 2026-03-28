@@ -297,13 +297,10 @@ def make_predictions():
     inputs = []
     st.header("Predict Risk Level")
      
-    if st.session_state.trained_model is not None:
-        active_model = st.session_state.trained_model
-    elif default_model is not None:
-        active_model = default_model
-    else:
-        st.error("No model available")
-        return
+    if st.session_state.trained_model is None:
+            st.warning("⚠️ Please train a model first before making predictions.")
+            st.info("Go to 'Model Training' page and train the model.")
+            return
                    # -------- INPUT --------
     st.subheader("Enter Input Data")
           
