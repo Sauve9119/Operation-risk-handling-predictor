@@ -236,11 +236,12 @@ def model_training():
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
+        st.write("Unique y_test:", np.unique(y_test))
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
-        y_test_labels = [label_map[i] for i in y_test]
-        y_pred_labels = [label_map[i] for i in y_pred]
+        y_test_labels = [label_map.get(int(i), "Unknown") for i in y_test]
+        y_pred_labels = [label_map.get(int(i), "Unknown") for i in y_pred]
      
      # -------- CLASSIFICATION REPORT --------
         report = classification_report(
