@@ -336,9 +336,9 @@ def make_predictions():
           
                   # -------- LABEL MAP --------
                   labels = {
-                      0: "🟢 Low Risk",
-                      1: "🟡 Medium Risk",
-                      2: "🔴 High Risk"
+                      0: "🟢 Low Risk Capacity",
+                      1: "🟡 Medium Risk Capacity",
+                      2: "🔴 High Risk Capacity"
                   }
           
                   st.subheader(f"Prediction: {labels.get(pred, 'Unknown')}")
@@ -356,20 +356,20 @@ def make_predictions():
                   # -------- RECOMMENDATIONS --------
                   st.subheader("Suggestions")
           
-                  if pred == 2:
-                      st.error("⚠️ High Risk: Improve skills & consistency")
+                  if pred == 0:
+                      st.error("⚠️ Low Risk Capacity: Improve skills & consistency")
                       st.markdown("- Focus on basics")
                       st.markdown("- Improve CGPA")
                       st.markdown("- Work on real projects")
           
                   elif pred == 1:
-                      st.warning("⚠️ Medium Risk: You are average, push harder")
+                      st.warning("⚠️ Medium Risk Capacity: You are average, push harder")
                       st.markdown("- Improve technical skills")
                       st.markdown("- Do internships")
                       st.markdown("- Practice coding")
           
                   else:
-                      st.success("✅ Low Risk: You're on the right track")
+                      st.success("✅ High Risk Capacity: You're on the right track")
                       st.markdown("- Keep improving")
                       st.markdown("- Try advanced projects")
                       st.markdown("- Build strong portfolio")
