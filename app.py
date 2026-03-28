@@ -4,6 +4,8 @@ import joblib
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+if 'trained_model' not in st.session_state:
+    st.session_state.trained_model = None
 
 st.set_page_config(page_title="Job Readiness Predictor", layout="wide")
 @st.cache_data
