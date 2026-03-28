@@ -31,7 +31,7 @@ def load_data():
         
         # Numeric Mapping
         for col in df.columns:
-            unique_vals = df[col].unique() # Sorted takay order na badle
+            unique_vals = sorted(df[col].unique()) # Sorted takay order na badle
             mapping = {val: i+1 for i, val in enumerate(unique_vals)}
             df[col] = df[col].map(mapping)
         return df
