@@ -31,7 +31,7 @@ def load_data():
         
         # Numeric Mapping
         for col in df.columns:
-            unique_vals = df[col].unique()
+            unique_vals = sorted(df[col].unique()) # Sorted takay order na badle
             mapping = {val: i+1 for i, val in enumerate(unique_vals)}
             df[col] = df[col].map(mapping)
         return df
@@ -168,9 +168,11 @@ def model_training():
          # GMM clustering से labels बनाओ (same as training)
      
     y = gmm.predict(X_scaled)
-    unique_clusters = np.unique(y)
-    cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
-    y = np.array([cluster_mapping[i] for i in y])
+    cluster_means = gmm.means_.mean(axis=1)
+    sorted_idx = np.argsort(cluster_means)
+    mapping = {old: new for new, old in enumerate(sorted_idx)}
+    y = np.array([mapping[i] for i in y])
+    label_map = {0: "Low Risk", 1: "Medium Risk", 2: "High Risk"}
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
