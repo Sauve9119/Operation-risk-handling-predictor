@@ -297,9 +297,13 @@ def make_predictions():
     inputs = []
     st.header("Predict Risk Level")
      
-    if st.session_state.trained_model is None:
-                 st.warning("Please train a model first")
-                 return
+    if st.session_state.trained_model is not None:
+        active_model = st.session_state.trained_model
+    elif default_model is not None:
+        active_model = default_model
+    else:
+        st.error("No model available")
+        return
                    # -------- INPUT --------
     st.subheader("Enter Input Data")
           
@@ -320,14 +324,6 @@ def make_predictions():
           
                   data = np.array([inputs])
                   data = scaler.transform(data)
-          
-                  if st.session_state.trained_model is not None:
-                        active_model = st.session_state.trained_model
-                  elif default_model is not None:
-                        active_model = default_model
-                  else:
-                        st.error("No model available. Please train model first.")
-                        return
                   pred = active_model.predict(data)[0]
                   if hasattr(active_model, "predict_proba"):
                         probs = active_model.predict_proba(data)[0]
