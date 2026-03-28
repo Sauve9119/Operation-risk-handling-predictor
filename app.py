@@ -165,7 +165,7 @@ def model_training():
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
-    prob = gmm.predict_proba(X)   # NO scaling here
+    prob = gmm.predict_proba(X_scaled)   
     y = np.argmax(prob, axis=1)
     cluster_means = gmm.means_.mean(axis=1)
     sorted_idx = np.argsort(cluster_means)
