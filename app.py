@@ -356,6 +356,6 @@ elif page == "Prediction":
                       st.markdown("- Keep improving")
                       st.markdown("- Try advanced projects")
                       st.markdown("- Build strong portfolio")
-        make_predictions() 
+        make_predictions(df) 
      
         
