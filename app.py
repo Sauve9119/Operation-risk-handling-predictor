@@ -190,8 +190,9 @@ def model_training():
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    risk_df = pd.DataFrame({"Risk":y})
-     # Ab chart show karein
+    y = np.concatenate([y_train, y_test])
+
+    risk_df = pd.DataFrame({"Risk": y})
     st.bar_chart(risk_df['Risk'].value_counts())
 
     # -------- SPLIT --------
