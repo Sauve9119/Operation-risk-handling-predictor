@@ -158,7 +158,7 @@ def data_exploration():
 
 def model_training():
     st.header("Model Training")
-     
+    
          # ---------------- FEATURES ----------------
     # SAME AS COLAB
     X = df.iloc[:,0:8]
@@ -186,7 +186,8 @@ def model_training():
     X_test = scaler.transform(X_test)
      
          # ---------------- TARGET ----------------
-
+    st.write("GMM components:", gmm.n_components)
+    st.write("train_prob shape:", train_prob.shape)
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
