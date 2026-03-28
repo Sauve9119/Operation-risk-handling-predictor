@@ -235,7 +235,6 @@ def model_training():
         accuracy = accuracy_score(y_test, y_pred)
      
      # -------- LABELS (IMPORTANT) --------
-        st.write("Unique y_test:", np.unique(y_test))
         label_map = {0: "Low", 1: "Medium", 2: "High"}
      
      # convert numeric → text
