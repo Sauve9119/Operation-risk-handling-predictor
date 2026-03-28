@@ -12,6 +12,10 @@ def load_data():
      df = df.iloc[:,2:]
      return df
 df = load_data()
+# ---------------- SIDEBAR ----------------
+st.sidebar.title("Navigation")
+page = st.sidebar.radio("Go to", ["Data Analysis", "Model Training", "Prediction"])
+
 if page == "Data Exploration":
         data_exploration()
 elif page == "Model Training":
@@ -50,9 +54,6 @@ inputs = []
 # load model
 model = joblib.load("model.pkl")
 scaler = joblib.load("scaler.pkl")
-# ---------------- SIDEBAR ----------------
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Data Analysis", "Model Training", "Prediction"])
 
 # ===================== PAGE 1 =====================
 def data_exploration():
