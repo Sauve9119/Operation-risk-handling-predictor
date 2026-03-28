@@ -31,7 +31,7 @@ def load_data():
         
         # Numeric Mapping
         for col in df.columns:
-            unique_vals = sorted(df[col].unique()) # Sorted takay order na badle
+            unique_vals = df[col].unique() # Sorted takay order na badle
             mapping = {val: i+1 for i, val in enumerate(unique_vals)}
             df[col] = df[col].map(mapping)
         return df
@@ -166,8 +166,6 @@ def model_training():
      
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
-     
-    y = gmm.predict(X)
     prob = gmm.predict_proba(X)   # NO scaling here
     y = np.argmax(prob, axis=1)
     cluster_means = gmm.means_.mean(axis=1)
