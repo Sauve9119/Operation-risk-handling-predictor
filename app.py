@@ -11,6 +11,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV, KFold, cross_validate
 
 # --- CONFIG ---
 st.set_page_config(page_title="Job Readiness Predictor", layout="wide")
@@ -209,12 +210,26 @@ def model_training():
             model = DecisionTreeClassifier(max_depth=3)
 
         elif model_option == "SVM":
-            model = SVC(kernel='rbf',
-                         C= 10 ,
-                         gamma = 0.5,
-                         probability = True,
-                         random_state = 42
-                         )
+            base_svm = SVC(kernel='rbf', probability=True, random_state=42)
+        
+            param_grid = {
+                'C': [0.1, 1, 10],
+                'gamma': [1, 0.1, 0.01]
+            }
+        
+            grid = GridSearchCV(
+                base_svm,
+                param_grid,
+                cv=5,
+                scoring='f1_weighted',
+                verbose=0
+            )
+        
+            grid.fit(X_train, y_train)
+        
+            model = grid.best_estimator_
+        
+            st.write("Best Parameters:", grid.best_params_)
         elif model_option == "Random Forest":
              model = RandomForestClassifier()
 
@@ -222,6 +237,27 @@ def model_training():
             model = KNeighborsClassifier(n_neighbors=3)
 
         model.fit(X_train, y_train)
+        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+
+        cv_scores = cross_validate(
+            model,
+            X_train,
+            y_train,
+            cv=kfold,
+            scoring={
+                'accuracy': 'accuracy',
+                'precision': 'precision_weighted',
+                'recall': 'recall_weighted',
+                'f1': 'f1_weighted'
+            }
+        )
+        
+        st.subheader("K-Fold Cross Validation Results")
+        
+        st.write("Accuracy:", cv_scores['test_accuracy'].mean())
+        st.write("Precision:", cv_scores['test_precision'].mean())
+        st.write("Recall:", cv_scores['test_recall'].mean())
+        st.write("F1 Score:", cv_scores['test_f1'].mean())
 
         st.session_state.trained_model = model
 
@@ -291,7 +327,9 @@ def model_training():
         ax.set_xlabel("Predicted")
         ax.set_ylabel("Actual")
      
-        st.pyplot(fig) 
+        st.pyplot(fig)
+        joblib.dump(model, "model.pkl")
+        st.success("Model saved successfully ✅")
 
 def make_predictions():
     inputs = []
