@@ -308,7 +308,7 @@ def model_training():
          "cm": cm
      }
      
-        st.success(f"Model training completed with accuracy: {accuracy:.2f}")
+        st.success(f"Model training completed with accuracy: {cv_accuracy:.2f}")
      
      # ================= DISPLAY =================
      
