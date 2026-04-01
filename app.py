@@ -256,15 +256,21 @@ def model_training():
             model.fit(X_train, y_train)
 
         if model_option != "SVM":
-            st.subheader("K-Fold Cross Validation Results")
-            
-            st.write("Accuracy:", cv_scores['test_accuracy'].mean())
-            st.write("Precision:", cv_scores['test_precision'].mean())
-            st.write("Recall:", cv_scores['test_recall'].mean())
-            st.write("F1 Score:", cv_scores['test_f1'].mean())
+            cv_accuracy = cv_scores['test_accuracy'].mean()
+            cv_precision = cv_scores['test_precision'].mean()
+            cv_recall = cv_scores['test_recall'].mean()
+            cv_f1 = cv_scores['test_f1'].mean()
+        
+            st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
+        
+            st.write(f"Accuracy: {cv_accuracy:.4f}")
+            st.write(f"Precision: {cv_precision:.4f}")
+            st.write(f"Recall: {cv_recall:.4f}")
+            st.write(f"F1 Score: {cv_f1:.4f}")
+        
         else:
-            st.subheader("Cross Validation Results (GridSearch)")
-            st.write("Best F1 Score:", grid.best_score_)
+            st.subheader("📊 Model Evaluation (GridSearch CV)")
+            st.write(f"Best F1 Score: {grid.best_score_:.4f}")
 
         st.session_state.trained_model = model
 
@@ -297,7 +303,7 @@ def model_training():
      
      # -------- SAVE --------
         st.session_state.model_metrics = {
-         "accuracy": accuracy,
+         "accuracy": cv_accuracy if model_option != "SVM" else grid.best_score_,
          "report": report,
          "cm": cm
      }
