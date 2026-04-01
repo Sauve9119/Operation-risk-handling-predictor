@@ -236,31 +236,35 @@ def model_training():
         else:
             model = KNeighborsClassifier(n_neighbors=3)
 
-        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
-
-        cv_scores = cross_validate(
-            model,
-            X_train,
-            y_train,
-            cv=kfold,
-            scoring={
-                'accuracy': 'accuracy',
-                'precision': 'precision_weighted',
-                'recall': 'recall_weighted',
-                'f1': 'f1_weighted'
-            }
-        )
+        if model_option != "SVM":
+            kfold = KFold(n_splits=5, shuffle=True, random_state=42)
         
-        # NOW train final model
+            cv_scores = cross_validate(
+                model,
+                X_train,
+                y_train,
+                cv=kfold,
+                scoring={
+                    'accuracy': 'accuracy',
+                    'precision': 'precision_weighted',
+                    'recall': 'recall_weighted',
+                    'f1': 'f1_weighted'
+                }
+            )
+            # FINAL MODEL TRAIN
         if model_option != "SVM":
             model.fit(X_train, y_train)
-        
-        st.subheader("K-Fold Cross Validation Results")
-        
-        st.write("Accuracy:", cv_scores['test_accuracy'].mean())
-        st.write("Precision:", cv_scores['test_precision'].mean())
-        st.write("Recall:", cv_scores['test_recall'].mean())
-        st.write("F1 Score:", cv_scores['test_f1'].mean())
+
+        if model_option != "SVM":
+            st.subheader("K-Fold Cross Validation Results")
+            
+            st.write("Accuracy:", cv_scores['test_accuracy'].mean())
+            st.write("Precision:", cv_scores['test_precision'].mean())
+            st.write("Recall:", cv_scores['test_recall'].mean())
+            st.write("F1 Score:", cv_scores['test_f1'].mean())
+        else:
+            st.subheader("Cross Validation Results (GridSearch)")
+            st.write("Best F1 Score:", grid.best_score_)
 
         st.session_state.trained_model = model
 
@@ -340,7 +344,8 @@ def model_training():
         ax.set_ylabel("Actual")
      
         st.pyplot(fig)
-        joblib.dump(model, "model.pkl")
+        joblib.dump(model, f"{model_option}_model.pkl")
+        joblib.dump(model, "best_model.pkl")
         st.success("Model saved successfully ✅")
 
 def make_predictions():
