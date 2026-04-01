@@ -251,15 +251,15 @@ def model_training():
                     'f1': 'f1_weighted'
                 }
             )
+        cv_accuracy = cv_scores['test_accuracy'].mean()
+        cv_precision = cv_scores['test_precision'].mean()
+        cv_recall = cv_scores['test_recall'].mean()
+        cv_f1 = cv_scores['test_f1'].mean()    
             # FINAL MODEL TRAIN
         if model_option != "SVM":
             model.fit(X_train, y_train)
 
         if model_option != "SVM":
-            cv_accuracy = cv_scores['test_accuracy'].mean()
-            cv_precision = cv_scores['test_precision'].mean()
-            cv_recall = cv_scores['test_recall'].mean()
-            cv_f1 = cv_scores['test_f1'].mean()
         
             st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
         
