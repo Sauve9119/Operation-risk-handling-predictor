@@ -236,19 +236,18 @@ def model_training():
         else:
             model = KNeighborsClassifier(n_neighbors=3)
 
-        if model_option != "SVM":
-            kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
         
-            cv_scores = cross_validate(
-                model,
-                X_train,
-                y_train,
-                cv=kfold,
-                scoring={
-                    'accuracy': 'accuracy',
-                    'precision': 'precision_weighted',
-                    'recall': 'recall_weighted',
-                    'f1': 'f1_weighted'
+        cv_scores = cross_validate(
+            model,
+            X_train,
+            y_train,
+            cv=kfold,
+            scoring={
+                'accuracy': 'accuracy',
+                'precision': 'precision_weighted',
+                'recall': 'recall_weighted',
+                'f1': 'f1_weighted'
                 }
             )
         cv_accuracy = cv_scores['test_accuracy'].mean()
