@@ -23,7 +23,6 @@ if 'model_metrics' not in st.session_state:
     st.session_state.model_metrics = None
 
 # --- DATA LOADING ---
-@st.cache_data
 def load_data():
     # Update the filename here if needed
     try:
@@ -43,7 +42,6 @@ def load_data():
 df = load_data()
 
 # --- MODEL LOADING ---
-@st.cache_resource
 def load_assets():
     try:
         scaler = joblib.load("scaler.pkl")
