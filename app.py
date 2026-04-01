@@ -236,7 +236,6 @@ def model_training():
         else:
             model = KNeighborsClassifier(n_neighbors=3)
 
-        model.fit(X_train, y_train)
         kfold = KFold(n_splits=5, shuffle=True, random_state=42)
 
         cv_scores = cross_validate(
@@ -252,6 +251,10 @@ def model_training():
             }
         )
         
+        # NOW train final model
+        if model_option != "SVM":
+            model.fit(X_train, y_train)
+        
         st.subheader("K-Fold Cross Validation Results")
         
         st.write("Accuracy:", cv_scores['test_accuracy'].mean())
@@ -263,6 +266,15 @@ def model_training():
 
         # -------- PREDICT --------
         y_pred = model.predict(X_test)
+        from sklearn.metrics import precision_score, recall_score, f1_score
+
+        precision = precision_score(y_test, y_pred, average='weighted')
+        recall = recall_score(y_test, y_pred, average='weighted')
+        f1 = f1_score(y_test, y_pred, average='weighted')
+        
+        st.write("Precision:", precision)
+        st.write("Recall:", recall)
+        st.write("F1 Score:", f1)
 
         from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
      
@@ -335,9 +347,9 @@ def make_predictions():
     inputs = []
     st.header("Predict Risk Level")
      
-    if st.session_state.trained_model is None:
-                 st.warning("Please train a model first")
-                 return
+    if st.session_state.trained_model is None and default_model is None:
+        st.warning("Please train a model first")
+        return
                    # -------- INPUT --------
     st.subheader("Enter Input Data")
           
