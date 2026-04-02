@@ -45,19 +45,18 @@ df = load_data()
 def load_assets():
     try:
         scaler = joblib.load("scaler.pkl")
-        gmm = joblib.load("gmm.pkl")
         # Load default model if exists, otherwise None
         try:
             default_model = joblib.load("model.pkl")
         except:
             default_model = None
-        return scaler, gmm, default_model
+        return scaler, default_model
     except Exception as e:
         st.error(f"Error loading .pkl files: {e}")
         return None, None, None
 
 # Assets load karein
-scaler, gmm, default_model = load_assets()
+scaler,default_model = load_assets()
 
 # --- PAGE FUNCTIONS ---
 
@@ -160,23 +159,40 @@ def model_training():
     st.header("Model Training")
      
          # ---------------- FEATURES ----------------
-    X = df.iloc[:,0:8]
-    X_scaled = scaler.transform(X)
-     
-         # ---------------- TARGET ----------------
-         # GMM clustering से labels बनाओ (same as training)
-     
+    from sklearn.mixture import GaussianMixture
+    from sklearn.preprocessing import StandardScaler
+    
+    # ---------------- FEATURES ----------------
+    X = df.iloc[:, 0:8]
+    
+    # ---------------- SCALING ----------------
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # ---------------- GMM TRAIN ----------------
+    gmm = GaussianMixture(n_components=3, random_state=42)
+    gmm.fit(X_scaled)
+    
+    # ---------------- CLUSTER ASSIGN ----------------
     prob = gmm.predict_proba(X_scaled)
     y = np.argmax(prob, axis=1)
+    
+    # ---------------- SORT CLUSTERS (LOW → HIGH) ----------------
     cluster_means = gmm.means_.mean(axis=1)
     sorted_idx = np.argsort(cluster_means)
+    
     mapping = {old: new for new, old in enumerate(sorted_idx)}
+    
     y = np.array([mapping[i] for i in y])
+    
+    # ---------------- STORE ----------------
     df['Risk_cluster'] = y
-
-    # -------- SHOW DISTRIBUTION --------
+    
+    # ---------------- DEBUG ----------------
+    st.write("Unique clusters:", np.unique(y))
+    
+    # ---------------- SHOW DISTRIBUTION ----------------
     st.subheader("Risk Distribution (Low / Medium / High)")
-     # Ab chart show karein
     st.bar_chart(df['Risk_cluster'].value_counts().sort_index())
 
     # -------- SPLIT --------
