@@ -314,9 +314,6 @@ def model_training():
         ax.set_ylabel("Actual")
      
         st.pyplot(fig)
-        joblib.dump(model, f"{model_option}_model.pkl")
-        joblib.dump(model, "best_model.pkl")
-        st.success("Model saved successfully ✅")
 
 def make_predictions():
     inputs = []
