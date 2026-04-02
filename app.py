@@ -166,17 +166,20 @@ def model_training():
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
      
-    y = gmm.predict(X_scaled)
-    unique_clusters = np.unique(y)
-    cluster_mapping = {old: new for new, old in enumerate(unique_clusters)}  
-    y = np.array([cluster_mapping[i] for i in y])
+    y = gmm.predict(X)
+    prob = gmm.predict_proba(X)
+    y = np.argmax(prob, axis=1)
+    df['Risk_cluster'] = y
+    cluster_means = gmm.means_.mean(axis=1)
+    sorted_idx = np.argsort(cluster_means)
+    mapping = {old: new for new, old in enumerate(sorted_idx)}
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
      # Mapping dictionary banayein
-    risk_df = pd.DataFrame({"Risk":y})
+    df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
      # Ab chart show karein
-    st.bar_chart(risk_df['Risk'].value_counts())
+    st.bar_chart(df['Risk_cluster'].value_counts())
 
     # -------- SPLIT --------
     from sklearn.model_selection import train_test_split
