@@ -202,45 +202,27 @@ def model_training():
         from sklearn.ensemble import RandomForestClassifier
 
         if model_option == "Logistic Regression":
-            model = LogisticRegression(C = 0.5)
+            model = LogisticRegression(C = 0.05)
 
         elif model_option == "Decision Tree":
-            model = DecisionTreeClassifier(max_depth=3)
+            model = DecisionTreeClassifier(max_depth=2 , random_state=42)
 
         elif model_option == "SVM":
-            base_svm = SVC(kernel='rbf', probability=True, random_state=42)
+            svm = SVC( C = 0.02, kernel='linear', probability=True, random_state=42)
         
-            param_grid = {
-                'C': [0.1, 1, 10],
-                'gamma': [1, 0.1, 0.01]
-            }
-        
-            grid = GridSearchCV(
-                base_svm,
-                param_grid,
-                cv=5,
-                scoring='f1_weighted',
-                verbose=0
-            )
-        
-            grid.fit(X_train, y_train)
-        
-            model = grid.best_estimator_
-        
-            st.write("Best Parameters:", grid.best_params_)
         elif model_option == "Random Forest":
-             model = RandomForestClassifier()
+             model = RandomForestClassifier(max_depth = 2,n_estimators=50, random_state=42)
 
         else:
-            model = KNeighborsClassifier(n_neighbors=3)
+            model = KNeighborsClassifier(n_neighbors=15)
 
-        kfold = KFold(n_splits=5, shuffle=True, random_state=42)
+        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
         
         cv_scores = cross_validate(
             model,
             X_train,
             y_train,
-            cv=kfold,
+            cv=skf,
             scoring={
                 'accuracy': 'accuracy',
                 'precision': 'precision_weighted',
@@ -253,21 +235,15 @@ def model_training():
         cv_recall = cv_scores['test_recall'].mean()
         cv_f1 = cv_scores['test_f1'].mean()    
             # FINAL MODEL TRAIN
-        if model_option != "SVM":
-            model.fit(X_train, y_train)
+        model.fit(X_train, y_train)
 
-        if model_option != "SVM":
         
-            st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
-        
-            st.write(f"Accuracy: {cv_accuracy:.4f}")
-            st.write(f"Precision: {cv_precision:.4f}")
-            st.write(f"Recall: {cv_recall:.4f}")
-            st.write(f"F1 Score: {cv_f1:.4f}")
-        
-        else:
-            st.subheader("📊 Model Evaluation (GridSearch CV)")
-            st.write(f"Best F1 Score: {grid.best_score_:.4f}")
+        st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
+    
+        st.write(f"Accuracy: {cv_accuracy:.4f}")
+        st.write(f"Precision: {cv_precision:.4f}")
+        st.write(f"Recall: {cv_recall:.4f}")
+        st.write(f"F1 Score: {cv_f1:.4f}")
 
         st.session_state.trained_model = model
 
@@ -300,7 +276,7 @@ def model_training():
      
      # -------- SAVE --------
         st.session_state.model_metrics = {
-         "accuracy": cv_accuracy if model_option != "SVM" else grid.best_score_,
+         "accuracy": cv_accuracy ,
          "report": report,
          "cm": cm
      }
