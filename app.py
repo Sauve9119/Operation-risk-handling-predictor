@@ -176,8 +176,6 @@ def model_training():
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
-     # Mapping dictionary banayein
-    df['Risk_cluster'] = df['Risk_cluster'].map(mapping)
      # Ab chart show karein
     st.bar_chart(df['Risk_cluster'].value_counts().sort_index())
 
