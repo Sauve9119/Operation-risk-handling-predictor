@@ -204,130 +204,229 @@ def model_training():
     st.success("Preprocessing Done ✅")
 
     # -------- MODEL SELECT --------
-    model_option = st.selectbox(
-        "Choose Model",
-        ["Logistic Regression", "Decision Tree", "SVM", "KNN" , "Random Forest"]
-    )
+    # model_option = st.selectbox(
+    #     "Choose Model",
+    #     ["Logistic Regression", "Decision Tree", "SVM", "KNN" , "Random Forest"]
+    # )
 
-    # -------- TRAIN --------
-    if st.button("Train Model"):
+    # # -------- TRAIN --------
+    # if st.button("Train Model"):
 
-        from sklearn.linear_model import LogisticRegression
-        from sklearn.tree import DecisionTreeClassifier
-        from sklearn.svm import SVC
-        from sklearn.neighbors import KNeighborsClassifier
-        from sklearn.ensemble import RandomForestClassifier
+    #     if model_option == "Logistic Regression":
+    #         model = LogisticRegression(C = 0.05)
 
-        if model_option == "Logistic Regression":
-            model = LogisticRegression(C = 0.05)
+    #     elif model_option == "Decision Tree":
+    #         model = DecisionTreeClassifier(max_depth=2 , random_state=42)
 
-        elif model_option == "Decision Tree":
-            model = DecisionTreeClassifier(max_depth=2 , random_state=42)
-
-        elif model_option == "SVM":
-            model = SVC( C = 0.02, kernel='linear', probability=True, random_state=42)
+    #     elif model_option == "SVM":
+    #         model = SVC( C = 0.02, kernel='linear', probability=True, random_state=42)
         
-        elif model_option == "Random Forest":
-            model = RandomForestClassifier(max_depth = 2,n_estimators=50, random_state=42)
+    #     elif model_option == "Random Forest":
+    #         model = RandomForestClassifier(max_depth = 2,n_estimators=50, random_state=42)
 
-        else:
-            model = KNeighborsClassifier(n_neighbors=15)
+    #     else:
+    #         model = KNeighborsClassifier(n_neighbors=15)
 
-        skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    #     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
         
-        cv_scores = cross_validate(
-            model,
-            X_train,
-            y_train,
-            cv=skf,
-            scoring={
-                'accuracy': 'accuracy',
-                'precision': 'precision_weighted',
-                'recall': 'recall_weighted',
-                'f1': 'f1_weighted'
-                }
-            )
-        cv_accuracy = cv_scores['test_accuracy'].mean()
-        cv_precision = cv_scores['test_precision'].mean()
-        cv_recall = cv_scores['test_recall'].mean()
-        cv_f1 = cv_scores['test_f1'].mean()    
-            # FINAL MODEL TRAIN
-        model.fit(X_train, y_train)
+    #     cv_scores = cross_validate(
+    #         model,
+    #         X_train,
+    #         y_train,
+    #         cv=skf,
+    #         scoring={
+    #             'accuracy': 'accuracy',
+    #             'precision': 'precision_weighted',
+    #             'recall': 'recall_weighted',
+    #             'f1': 'f1_weighted'
+    #             }
+    #         )
+    #     cv_accuracy = cv_scores['test_accuracy'].mean()
+    #     cv_precision = cv_scores['test_precision'].mean()
+    #     cv_recall = cv_scores['test_recall'].mean()
+    #     cv_f1 = cv_scores['test_f1'].mean()    
+    #         # FINAL MODEL TRAIN
+    #     model.fit(X_train, y_train)
 
         
-        st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
+    #     st.subheader("📊 Model Evaluation (K-Fold Cross Validation)")
     
-        st.write(f"Accuracy: {cv_accuracy:.4f}")
-        st.write(f"Precision: {cv_precision:.4f}")
-        st.write(f"Recall: {cv_recall:.4f}")
-        st.write(f"F1 Score: {cv_f1:.4f}")
+    #     st.write(f"Accuracy: {cv_accuracy:.4f}")
+    #     st.write(f"Precision: {cv_precision:.4f}")
+    #     st.write(f"Recall: {cv_recall:.4f}")
+    #     st.write(f"F1 Score: {cv_f1:.4f}")
 
-        st.session_state.trained_model = model
+    #     st.session_state.trained_model = model
 
-        # -------- PREDICT --------
-        y_pred = model.predict(X_test)
+    #     # -------- PREDICT --------
+    #     y_pred = model.predict(X_test)
         
 
-        from sklearn.metrics import classification_report, confusion_matrix
+    #     from sklearn.metrics import classification_report, confusion_matrix
      
      
-     # -------- LABELS (IMPORTANT) --------
-        label_map = {0: "Low", 1: "Medium", 2: "High"}
+    #  # -------- LABELS (IMPORTANT) --------
+    #     label_map = {0: "Low", 1: "Medium", 2: "High"}
      
-     # convert numeric → text
-        y_test_labels = [label_map[i] for i in y_test]
-        y_pred_labels = [label_map[i] for i in y_pred]
+    #  # convert numeric → text
+    #     y_test_labels = [label_map[i] for i in y_test]
+    #     y_pred_labels = [label_map[i] for i in y_pred]
      
-     # -------- CLASSIFICATION REPORT --------
-        report = classification_report(
-         y_test_labels,
-         y_pred_labels,
-         output_dict=True,
-         zero_division=0
-     )
+    #  # -------- CLASSIFICATION REPORT --------
+    #     report = classification_report(
+    #      y_test_labels,
+    #      y_pred_labels,
+    #      output_dict=True,
+    #      zero_division=0
+    #  )
      
-     # -------- CONFUSION MATRIX --------
-        labels = ["Low", "Medium", "High"]
+    #  # -------- CONFUSION MATRIX --------
+    #     labels = ["Low", "Medium", "High"]
      
-        cm = confusion_matrix(y_test_labels, y_pred_labels, labels=labels)
+    #     cm = confusion_matrix(y_test_labels, y_pred_labels, labels=labels)
      
-     # -------- SAVE --------
-        st.session_state.model_metrics = {
-         "accuracy": cv_accuracy ,
-         "report": report,
-         "cm": cm
-     }
+    #  # -------- SAVE --------
+    #     st.session_state.model_metrics = {
+    #      "accuracy": cv_accuracy ,
+    #      "report": report,
+    #      "cm": cm
+    #  }
      
-        st.success(f"Model training completed with accuracy: {cv_accuracy:.2f}")
+    #     st.success(f"Model training completed with accuracy: {cv_accuracy:.2f}")
      
-     # ================= DISPLAY =================
+    #  # ================= DISPLAY =================
      
-        st.subheader("Model Evaluation")
+    #     st.subheader("Model Evaluation")
      
-     # -------- REPORT DISPLAY --------
-        st.subheader("Classification Report")
-        report_df = pd.DataFrame(report).transpose()
-        st.dataframe(report_df)
+    #  # -------- REPORT DISPLAY --------
+    #     st.subheader("Classification Report")
+    #     report_df = pd.DataFrame(report).transpose()
+    #     st.dataframe(report_df)
      
-     # -------- CONFUSION MATRIX DISPLAY --------
-        st.subheader("Confusion Matrix")
+    #  # -------- CONFUSION MATRIX DISPLAY --------
+    #     st.subheader("Confusion Matrix")
      
-        fig, ax = plt.subplots()
+    #     fig, ax = plt.subplots()
      
-        sns.heatmap(
-         cm,
-         annot=True,
-         fmt='d',
-         cmap="Blues",
-         xticklabels=labels,
-         yticklabels=labels,
-         ax=ax
-     )
+    #     sns.heatmap(
+    #      cm,
+    #      annot=True,
+    #      fmt='d',
+    #      cmap="Blues",
+    #      xticklabels=labels,
+    #      yticklabels=labels,
+    #      ax=ax
+    #  )
      
-        ax.set_xlabel("Predicted")
-        ax.set_ylabel("Actual")
+    #     ax.set_xlabel("Predicted")
+    #     ax.set_ylabel("Actual")
      
-        st.pyplot(fig)
+    #     st.pyplot(fig)
+    # -------- TRAIN BUTTON --------
+if st.button("Train Auto ML Model 🚀"):
+
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+    models = {
+        "SVM": (
+            SVC(probability=True, random_state=42),
+            {
+                'C': [0.01, 0.1, 1],
+                'kernel': ['linear', 'rbf']
+            }
+        ),
+        
+        "Random Forest": (
+            RandomForestClassifier(random_state=42),
+            {
+                'n_estimators': [50, 100],
+                'max_depth': [2, 5, 10]
+            }
+        ),
+        
+        "KNN": (
+            KNeighborsClassifier(),
+            {
+                'n_neighbors': [5, 10, 15, 20]
+            }
+        ),
+        
+        "Logistic Regression": (
+            LogisticRegression(),
+            {
+                'C': [0.01, 0.05, 0.1, 1]
+            }
+        ),
+        
+        "Decision Tree": (
+            DecisionTreeClassifier(random_state=42),
+            {
+                'max_depth': [2, 3, 5, 10]
+            }
+        )
+    }
+
+    best_model = None
+    best_score = 0
+
+    st.subheader("📊 Model Evaluation (Auto ML)")
+
+    for name, (model, params) in models.items():
+
+        grid = GridSearchCV(model, params, cv=5, scoring='accuracy', n_jobs=-1)
+        grid.fit(X_train, y_train)
+
+        best_estimator = grid.best_estimator_
+        y_pred = best_estimator.predict(X_test)
+
+        acc = accuracy_score(y_test, y_pred)
+        prec = precision_score(y_test, y_pred, average='weighted', zero_division=0)
+        rec = recall_score(y_test, y_pred, average='weighted', zero_division=0)
+        f1 = f1_score(y_test, y_pred, average='weighted', zero_division=0)
+
+        st.write(f"### {name}")
+        st.write("Best Params:", grid.best_params_)
+        st.write(f"Accuracy: {acc:.4f}")
+        st.write(f"Precision: {prec:.4f}")
+        st.write(f"Recall: {rec:.4f}")
+        st.write(f"F1 Score: {f1:.4f}")
+        st.write("---")
+
+        if acc > best_score:
+            best_score = acc
+            best_model = best_estimator
+            best_y_pred = y_pred
+
+    # -------- SAVE BEST MODEL --------
+    st.session_state.trained_model = best_model
+
+    st.success(f"🔥 Best Model Accuracy: {best_score:.4f}")
+
+    # -------- REPORT --------
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    label_map = {0: "Low", 1: "Medium", 2: "High"}
+
+    y_test_labels = [label_map[i] for i in y_test]
+    y_pred_labels = [label_map[i] for i in best_y_pred]
+
+    report = classification_report(y_test_labels, y_pred_labels, output_dict=True, zero_division=0)
+
+    cm = confusion_matrix(y_test_labels, y_pred_labels, labels=["Low", "Medium", "High"])
+
+    # -------- DISPLAY --------
+    st.subheader("Classification Report")
+    st.dataframe(pd.DataFrame(report).transpose())
+
+    st.subheader("Confusion Matrix")
+
+    fig, ax = plt.subplots()
+    sns.heatmap(cm, annot=True, fmt='d', cmap="Blues",
+                xticklabels=["Low", "Medium", "High"],
+                yticklabels=["Low", "Medium", "High"], ax=ax)
+
+    st.pyplot(fig)
 
 def make_predictions():
     inputs = []
