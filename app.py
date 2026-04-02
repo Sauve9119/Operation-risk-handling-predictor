@@ -166,8 +166,7 @@ def model_training():
          # ---------------- TARGET ----------------
          # GMM clustering से labels बनाओ (same as training)
      
-    y = gmm.fit(X)
-    prob = gmm.predict_proba(X)
+    prob = gmm.predict_proba(X_scaled)
     y = np.argmax(prob, axis=1)
     df['Risk_cluster'] = y
     cluster_means = gmm.means_.mean(axis=1)
