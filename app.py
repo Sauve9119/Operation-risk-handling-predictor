@@ -168,10 +168,11 @@ def model_training():
      
     prob = gmm.predict_proba(X_scaled)
     y = np.argmax(prob, axis=1)
-    df['Risk_cluster'] = y
     cluster_means = gmm.means_.mean(axis=1)
     sorted_idx = np.argsort(cluster_means)
     mapping = {old: new for new, old in enumerate(sorted_idx)}
+    y = np.array([mapping[i] for i in y])
+    df['Risk_cluster'] = y
 
     # -------- SHOW DISTRIBUTION --------
     st.subheader("Risk Distribution (Low / Medium / High)")
