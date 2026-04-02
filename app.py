@@ -11,7 +11,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV, KFold, cross_validate
+from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_validate
 
 # --- CONFIG ---
 st.set_page_config(page_title="Job Readiness Predictor", layout="wide")
