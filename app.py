@@ -208,10 +208,10 @@ def model_training():
             model = DecisionTreeClassifier(max_depth=2 , random_state=42)
 
         elif model_option == "SVM":
-            svm = SVC( C = 0.02, kernel='linear', probability=True, random_state=42)
+            model = SVC( C = 0.02, kernel='linear', probability=True, random_state=42)
         
         elif model_option == "Random Forest":
-             model = RandomForestClassifier(max_depth = 2,n_estimators=50, random_state=42)
+            model = RandomForestClassifier(max_depth = 2,n_estimators=50, random_state=42)
 
         else:
             model = KNeighborsClassifier(n_neighbors=15)
