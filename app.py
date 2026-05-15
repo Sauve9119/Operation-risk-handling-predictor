@@ -54,7 +54,7 @@ hr { border: none; border-top: 1px solid #1e2d4a; margin: 28px 0; }
 
 # ─── CSV name ──────────────────────────────────────────────────────────────────
 import os
-CSV_FILE = os.path.join(os.path.dirname(__file__), "How Ready Are You for Real-World Job Situations_ (Responses) - Form Responses 1.csv")
+CSV_FILE = os.path.join(os.path.dirname(__file__), "responses.csv")
 
 # ─── Load & Preprocess ─────────────────────────────────────────────────────────
 @st.cache_data
