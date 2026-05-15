@@ -48,7 +48,7 @@ html, body, [class*="css"] { font-family: 'Syne', sans-serif; }
 hr { border: none; border-top: 1px solid #1e2d4a; margin: 28px 0; }
 .stButton > button { background: linear-gradient(135deg, #1a3a6e 0%, #0f2a55 100%); color: #63b3ff; border: 1px solid #2a5aaa; border-radius: 12px; font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 1px; padding: 12px 32px; transition: all 0.2s; }
 .stButton > button:hover { background: linear-gradient(135deg, #2a5aaa 0%, #1a3a6e 100%); box-shadow: 0 4px 20px rgba(99,179,255,0.25); transform: translateY(-1px); }
-#MainMenu, footer, header { visibility: hidden; }
+#MainMenu, footer { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
