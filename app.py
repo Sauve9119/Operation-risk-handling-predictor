@@ -79,7 +79,8 @@ def load_and_prepare():
         {"Don't communicate":1,"Communicate very late":2,"Communicate when asked":3,"Communicate early":4,"Communicate early with solutions":5},
     ]
     for i, m in enumerate(mappings):
-        df.iloc[:, i] = df.iloc[:, i].map(m)
+        col = df.columns[i]
+        df[col] = df[col].map(m)
     df = df.dropna().astype(int).reset_index(drop=True)
     original_count = len(df)
 
