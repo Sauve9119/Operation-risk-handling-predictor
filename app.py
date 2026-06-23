@@ -119,13 +119,13 @@ def train_pipeline(_df):
         "Decision Tree":      DecisionTreeClassifier(max_depth=2, random_state=42),
     }
     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    from sklearn.model_selection import cross_val_score
 
-    # STEP 1: fit all models first — exactly like notebook
+    # STEP 1: fit all models — notebook does this before cross_validate
     for mdl in mdls.values():
         mdl.fit(X_tr, y_tr)
 
-    # STEP 2: cross_validate for the metrics table
-    from sklearn.model_selection import cross_val_score
+    # STEP 2: cross_validate — notebook uses already-fitted models for CV table
     results = {}
     for name, mdl in mdls.items():
         sc = cross_validate(mdl, X_tr, y_tr, cv=skf,
@@ -138,7 +138,8 @@ def train_pipeline(_df):
             'F1 Score':  round(sc['test_f1'].mean(),        4),
         }
 
-    # STEP 3: pick best using cross_val_score on f1_weighted — same as notebook
+    # STEP 3: notebook uses separate cross_val_score loop to pick best_model
+    # This is a SEPARATE call — notebook cell 18 runs AFTER cell 16
     best_name, best_score_cv = None, 0
     for name, mdl in mdls.items():
         score = cross_val_score(mdl, X_tr, y_tr, cv=skf, scoring='f1_weighted').mean()
@@ -146,7 +147,9 @@ def train_pipeline(_df):
             best_score_cv = score
             best_name     = name
 
-    best_mdl = mdls[best_name]  # already fitted in STEP 1
+    # STEP 4: refit best model on full X_tr (like notebook's fit calls above)
+    best_mdl = mdls[best_name]
+    best_mdl.fit(X_tr, y_tr)
 
     return scaler, gmm, results, (best_name, best_mdl), mapping, X_tr, X_te, y_tr, y_te
 
@@ -282,13 +285,14 @@ elif page == "📊  Data & Visualizations":
         plt.tight_layout(); st.pyplot(fig)
 
     with tab3:
-        X_s2 = scaler.transform(df.values)
-        bic  = [GaussianMixture(n_components=k, n_init=10, random_state=42).fit(X_s2).bic(X_s2) for k in range(1,8)]
+        X_s2   = scaler.transform(df.values)
+        k_vals = list(range(1, 7))   # notebook: range(1, 7)
+        bic    = [GaussianMixture(n_components=k, n_init=10, random_state=42).fit(X_s2).bic(X_s2) for k in k_vals]
         fig, ax = dark_fig(8, 5)
-        ax.plot(range(1,8), bic, marker='o', color='#63b3ff', linewidth=2.5, markersize=8, markerfacecolor='#a78bfa')
+        ax.plot(k_vals, bic, marker='o', color='#63b3ff', linewidth=2.5, markersize=8, markerfacecolor='#a78bfa')
         ax.axvline(x=3, color='#06d6a0', linestyle='--', alpha=0.6, label='Selected k=3')
         # annotate BIC values on each point
-        for k, b in zip(range(1,8), bic):
+        for k, b in zip(k_vals, bic):
             ax.annotate(f'{b:.0f}', (k, b), textcoords='offset points', xytext=(0,10),
                         ha='center', color='#c9d6ea', fontsize=8)
         ax.set_xlabel('Number of Clusters', color='#6a8db8')
