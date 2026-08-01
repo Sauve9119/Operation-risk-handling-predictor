@@ -4,7 +4,7 @@ This project predicts job readiness risk using ML models.
 
 ## Tech Used
 - GMM (Clustering)
-- SVM (Classification)
+- SVM & Random Forest(Classification)
 - Streamlit (Web App)
 
 ## Run Locally
