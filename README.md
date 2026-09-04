@@ -104,11 +104,3 @@ streamlit run app.py
 ├── requirements.txt                  # Dependencies
 └── README.md
 ```
-
----
-
-## Author
-
-**Rachit Gupta**
-B.Tech Mechanical Engineering | MNIT Jaipur
-[LinkedIn](https://www.linkedin.com/in/rachit-gupta-4ba904321/) | [GitHub](https://github.com/Sauve9119)
